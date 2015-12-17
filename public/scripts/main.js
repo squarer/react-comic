@@ -39,6 +39,51 @@ var Navbar = React.createClass({
   }
 });
 
+var Catalog = React.createClass({
+  render: function() {
+    return (
+      <div className="col-md-2 col-sm-3 col-xs-4 thumb">
+        <a className="thumbnail" href="#">
+          <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+        </a>
+      </div>
+    );
+  }
+});
+
+var Content = React.createClass({
+  loadCatalogs: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      success: function(catalogs) {
+        this.setState({catalogs: catalogs});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    return {catalogs: []};
+  },
+  componentDidMount: function() {
+    this.loadCatalogs();
+  },
+  render: function() {
+    var gridNodes = this.state.catalogs.map(function(catalog, index) {
+      return (
+        <Catalog catalog={catalog} key={index} />
+      );
+    });
+    return (
+      <div className="row">
+        {gridNodes}
+      </div>
+    );
+  }
+});
+
 var CATEGORIES = [
   {id : 1, name : '爱情类'},
   {id : 2, name : '温情类'},
@@ -58,6 +103,9 @@ var CATEGORIES = [
 ];
 
 ReactDOM.render(
-  <Navbar categories={CATEGORIES} />,
+  <div>
+    <Navbar categories={CATEGORIES} />
+    <Content url="/api/catalogs" />
+  </div>,
   document.getElementById('container')
 );
