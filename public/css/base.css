@@ -1,3 +1,12 @@
 body {
   padding-top: 70px;
 }
+
+.img-responsive {
+  zoom: 1.5;
+  border: 1px solid #444;
+}
+
+.thumbnail {
+  border-style: none;
+}

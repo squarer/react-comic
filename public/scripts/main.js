@@ -62,7 +62,7 @@ var Catalog = React.createClass({
     return (
       <div className="col-md-2 col-sm-3 col-xs-4 thumb">
         <a className="thumbnail" href="#">
-          <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+          <img className="img-responsive image" src={this.props.catalog.thumbnailurl} />
         </a>
       </div>
     );
