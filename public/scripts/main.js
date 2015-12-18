@@ -2,7 +2,7 @@ var Category = React.createClass({
   render: function() {
     var name = this.props.category.name.slice(0, -1);
     return (
-      <li className="cateogory">
+      <li>
         <a href="#">{name}</a>
       </li>
     );
@@ -77,7 +77,7 @@ var Content = React.createClass({
       );
     });
     return (
-      <div className="row">
+      <div className="grid">
         {gridNodes}
       </div>
     );
@@ -103,9 +103,13 @@ var CATEGORIES = [
 ];
 
 ReactDOM.render(
-  <div>
-    <Navbar categories={CATEGORIES} />
-    <Content url="/api/catalogs" />
+  <div className="main">
+    <div className="row>">
+      <Navbar categories={CATEGORIES} />
+    </div>
+    <div className="row">
+      <Content url="/api/catalogs" />
+    </div>
   </div>,
   document.getElementById('container')
 );
