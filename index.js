@@ -4,9 +4,15 @@ var express = require('express');
 var app = express();
 
 app.set('port', (process.env.PORT || 3000));
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(__dirname + '/public'));
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
 
 var SAMPLE_FILE = path.join(__dirname, 'fake.json');
+
+app.get('/', function(req, res) {
+  res.render('index');
+});
 
 app.get('/api/catalogs', function(req, res) {
   fs.readFile(SAMPLE_FILE, function(err, data) {
