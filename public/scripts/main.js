@@ -1,17 +1,35 @@
 var Category = React.createClass({
   render: function() {
-    var name = this.props.category.name.slice(0, -1);
+    var category = this.props.category.slice(0, -1);
     return (
       <li>
-        <a href="#">{name}</a>
+        <a href="#">{category}</a>
       </li>
     );
   }
 });
 
 var Navbar = React.createClass({
+  loadCategories: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      success: function(categories) {
+        this.setState({categories: categories});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    return {categories: []};
+  },
+  componentDidMount: function() {
+    this.loadCategories();
+  },
   render: function() {
-    var categoryNodes = this.props.categories.map(function(category, index) {
+    var categoryNodes = this.state.categories.map(function(category, index) {
       return (
         <Category category={category} key={index} />
       );
@@ -84,31 +102,15 @@ var Content = React.createClass({
   }
 });
 
-var CATEGORIES = [
-  {id : 1, name : '爱情类'},
-  {id : 2, name : '温情类'},
-  {id : 3, name : '校园类'},
-  {id : 4, name : '推理类'},
-  {id : 5, name : '冒险类'},
-  {id : 6, name : '魔幻类'},
-  {id : 7, name : '运动类'},
-  {id : 8, name : '热血类'},
-  {id : 9, name : '科幻类'},
-  {id : 10, name : '机战类'},
-  {id : 11, name : '武侠类'},
-  {id : 12, name : '搞笑类'},
-  {id : 13, name : '恐怖类'},
-  {id : 14, name : '耽美类'},
-  {id : 15, name : '社会类'},
-];
+var host = document.getElementById('container').dataset.host;
 
 ReactDOM.render(
   <div className="main">
     <div className="row>">
-      <Navbar categories={CATEGORIES} />
+      <Navbar url={host + '/catalog/category'} />
     </div>
     <div className="row">
-      <Content url="/api/catalogs" />
+      <Content url={host + '/catalog'} />
     </div>
   </div>,
   document.getElementById('container')

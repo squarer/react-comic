@@ -12,5 +12,5 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js')
   body
-    #container.container
+    #container.container(data-host="#{host}")
     script(type='text/babel', src='/public/scripts/main.js')
