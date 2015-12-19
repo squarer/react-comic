@@ -35,7 +35,7 @@ var Navbar = React.createClass({
       );
     });
     return (
-      <div className="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div className="navbar navbar-default" role="navigation">
         <div className="container">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-305-collapse">
@@ -52,6 +52,21 @@ var Navbar = React.createClass({
             </ul>
           </div>
         </div>
+      </div>
+    );
+  }
+});
+
+var SearchBar = React.createClass({
+  render: function() {
+    return (
+      <div className="input-group col-md-12">
+        <input type="text" className="form-control input-lg" placeholder="search comic..." />
+        <span className="input-group-btn">
+          <button className="btn btn-info btn-lg" type="button">
+            <i className="glyphicon glyphicon-search"></i>
+          </button>
+        </span>
       </div>
     );
   }
@@ -102,16 +117,21 @@ var Content = React.createClass({
   }
 });
 
-var host = document.getElementById('container').dataset.host;
+var host = document.querySelector('#container').dataset.host;
 
 ReactDOM.render(
   <div className="main">
-    <div className="row">
-      <Navbar url={host + '/catalog/category'} />
-    </div>
-    <div className="row">
-      <Content url={host + '/catalog'} />
+    <Navbar url={host + '/catalog/category'} />
+    <div className="container">
+      <div className="row">
+        <div className="col-md-offset-3 col-md-6">
+          <SearchBar />
+        </div>
+      </div>
+      <div className="row">
+        <Content url={host + '/catalog'} />
+      </div>
     </div>
   </div>,
-  document.getElementById('container')
+  document.querySelector('#container')
 );

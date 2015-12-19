@@ -1,5 +1,5 @@
 body {
-  padding-top: 70px;
+  margin: 0;
 }
 
 .img-responsive {
@@ -9,4 +9,8 @@ body {
 
 .thumbnail {
   border-style: none;
+}
+
+.row {
+  height: 70px;
 }
