@@ -57,13 +57,73 @@ var Navbar = React.createClass({
   }
 });
 
+var Wrapper = React.createClass({
+  handleSearch: function(title) {
+    var url = this.props.url;
+    if (title) {
+      url += '?title=' + title.trim();
+    }
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      success: function(catalogs) {
+        this.setState({catalogs: catalogs});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+ getInitialState: function() {
+  return {catalogs: []};
+ },
+ componentDidMount: function() {
+  this.handleSearch();
+ },
+ render: function() {
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-md-offset-3 col-md-6">
+          <SearchBar onSearch={this.handleSearch} />
+        </div>
+      </div>
+      <div className="row">
+        <Content catalogs={this.state.catalogs} />
+      </div>
+    </div>
+  );
+ }
+});
+
 var SearchBar = React.createClass({
+  getInitialState: function() {
+    return {value: ''};
+  },
+  handleChange: function(event) {
+    this.setState({value: event.target.value});
+  },
+  handleKeyDown: function(event) {
+    if (event.keyCode == 13) {
+      this.props.onSearch(this.state.value);
+    }
+  },
+  handleSearch: function() {
+    this.props.onSearch(this.state.value);
+  },
   render: function() {
     return (
       <div className="input-group col-md-12">
-        <input type="text" className="form-control input-lg" placeholder="search comic..." />
+        <input
+          type="text"
+          className="form-control input-lg"
+          placeholder="search comic..."
+          ref="titleInput"
+          onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
+        />
         <span className="input-group-btn">
-          <button className="btn btn-info btn-lg" type="button">
+          <button className="btn btn-info btn-lg" type="button" onClick={this.handleSearch}>
             <i className="glyphicon glyphicon-search"></i>
           </button>
         </span>
@@ -85,26 +145,8 @@ var Catalog = React.createClass({
 });
 
 var Content = React.createClass({
-  loadCatalogs: function() {
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      success: function(catalogs) {
-        this.setState({catalogs: catalogs});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
-  getInitialState: function() {
-    return {catalogs: []};
-  },
-  componentDidMount: function() {
-    this.loadCatalogs();
-  },
   render: function() {
-    var gridNodes = this.state.catalogs.map(function(catalog, index) {
+    var gridNodes = this.props.catalogs.map(function(catalog, index) {
       return (
         <Catalog catalog={catalog} key={index} />
       );
@@ -121,17 +163,8 @@ var host = document.querySelector('#container').dataset.host;
 
 ReactDOM.render(
   <div className="main">
-    <Navbar url={host + '/catalog/category'} />
-    <div className="container">
-      <div className="row">
-        <div className="col-md-offset-3 col-md-6">
-          <SearchBar />
-        </div>
-      </div>
-      <div className="row">
-        <Content url={host + '/catalog'} />
-      </div>
-    </div>
+    <Navbar url={host + '/category'} />
+    <Wrapper url={host + '/catalog'} />
   </div>,
   document.querySelector('#container')
 );
