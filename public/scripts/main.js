@@ -106,7 +106,7 @@ var host = document.getElementById('container').dataset.host;
 
 ReactDOM.render(
   <div className="main">
-    <div className="row>">
+    <div className="row">
       <Navbar url={host + '/catalog/category'} />
     </div>
     <div className="row">
