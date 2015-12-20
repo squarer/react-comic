@@ -85,7 +85,7 @@ var Wrapper = React.createClass({
     <div className="container">
       <div className="row">
         <div className="col-md-offset-3 col-md-6">
-          <SearchBar onSearch={this.handleSearch} />
+          <SearchBar url={this.props.url} onSearch={this.handleSearch} />
         </div>
       </div>
       <div className="row">
@@ -111,16 +111,39 @@ var SearchBar = React.createClass({
   handleSearch: function() {
     this.props.onSearch(this.state.value);
   },
+  componentDidMount: function() {
+    var url = this.props.url;
+    $('.input-group .typeahead').typeahead({
+      highlight: true,
+      hint: false,
+      minLength: 1
+    },
+    {
+      source: function(query, results, asyncResults) {
+        $.ajax({
+          url: url + '?title=' + query,
+          dataType: 'json',
+          success: function(data) {
+            var list = [];
+            data.forEach(function(value) {
+              list.push(value.title);
+            });
+            asyncResults(list);
+          }
+        });
+      }
+    });
+  },
   render: function() {
     return (
       <div className="input-group col-md-12">
         <input
           type="text"
-          className="form-control input-lg"
+          className="form-control input-lg typeahead"
           placeholder="search comic..."
-          ref="titleInput"
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
+          ref="titleInput"
         />
         <span className="input-group-btn">
           <button className="btn btn-info btn-lg" type="button" onClick={this.handleSearch}>
