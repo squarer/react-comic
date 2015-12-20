@@ -113,7 +113,7 @@ var SearchBar = React.createClass({
   },
   componentDidMount: function() {
     var url = this.props.url;
-    $('.input-group .typeahead').typeahead({
+    $('.typeahead').typeahead({
       highlight: true,
       hint: false,
       minLength: 1
@@ -132,6 +132,11 @@ var SearchBar = React.createClass({
           }
         });
       }
+    });
+
+    var that = this;
+    $('.typeahead').bind('typeahead:select', function(event, suggestion) {
+      that.handleChange(event);
     });
   },
   render: function() {
