@@ -1,9 +1,13 @@
 var Category = React.createClass({
+  handleClick: function() {
+    var category = this.refs.item.dataset.category;
+    this.props.byCategory(null, category);
+  },
   render: function() {
     var category = this.props.category.slice(0, -1);
     return (
-      <li>
-        <a href="#">{category}</a>
+      <li data-category={this.props.category} ref="item">
+        <a href="#" onClick={this.handleClick}>{category}</a>
       </li>
     );
   }
@@ -29,9 +33,10 @@ var Navbar = React.createClass({
     this.loadCategories();
   },
   render: function() {
+    var that = this;
     var categoryNodes = this.state.categories.map(function(category, index) {
       return (
-        <Category category={category} key={index} />
+        <Category category={category} key={index} byCategory={that.props.byCategory}/>
       );
     });
     return (
@@ -58,38 +63,16 @@ var Navbar = React.createClass({
 });
 
 var Wrapper = React.createClass({
-  handleSearch: function(title) {
-    var url = this.props.url;
-    if (title) {
-      url += '?title=' + title.trim();
-    }
-    $.ajax({
-      url: url,
-      dataType: 'json',
-      success: function(catalogs) {
-        this.setState({catalogs: catalogs});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
- getInitialState: function() {
-  return {catalogs: []};
- },
- componentDidMount: function() {
-  this.handleSearch();
- },
  render: function() {
   return (
     <div className="container">
       <div className="row">
         <div className="col-md-offset-3 col-md-6">
-          <SearchBar url={this.props.url} onSearch={this.handleSearch} />
+          <SearchBar url={this.props.url} onSearch={this.props.byTitle} />
         </div>
       </div>
       <div className="row">
-        <Content catalogs={this.state.catalogs} />
+        <Content catalogs={this.props.catalogs} />
       </div>
     </div>
   );
@@ -108,7 +91,7 @@ var SearchBar = React.createClass({
       this.props.onSearch(this.state.value);
     }
   },
-  handleSearch: function() {
+  handleClick: function() {
     this.props.onSearch(this.state.value);
   },
   componentDidMount: function() {
@@ -151,7 +134,7 @@ var SearchBar = React.createClass({
           ref="titleInput"
         />
         <span className="input-group-btn">
-          <button className="btn btn-info btn-lg" type="button" onClick={this.handleSearch}>
+          <button className="btn btn-info btn-lg" type="button" onClick={this.handleClick}>
             <i className="glyphicon glyphicon-search"></i>
           </button>
         </span>
@@ -187,12 +170,46 @@ var Content = React.createClass({
   }
 });
 
+var Main = React.createClass({
+  getInitialState: function() {
+    return {catalogs: []};
+  },
+  componentDidMount: function() {
+    this.handleSearch();
+  },
+  handleSearch: function(title, category) {
+    var url = this.props.host + '/catalog?';
+    if (title) {
+      url += 'title=' + title.trim() + '&';
+    }
+    if (category) {
+      url += 'category=' + category;
+    }
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      success: function(catalogs) {
+        this.setState({catalogs: catalogs});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  render: function() {
+    var host = this.props.host;
+    return (
+      <div>
+        <Navbar url={host + '/category'} byCategory={this.handleSearch} />
+        <Wrapper url={host + '/catalog'} byTitle={this.handleSearch} catalogs={this.state.catalogs}/>
+      </div>
+    );
+  }
+});
+
 var host = document.querySelector('#container').dataset.host;
 
 ReactDOM.render(
-  <div className="main">
-    <Navbar url={host + '/category'} />
-    <Wrapper url={host + '/catalog'} />
-  </div>,
+  <Main host={host} />,
   document.querySelector('#container')
 );
