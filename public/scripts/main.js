@@ -1,12 +1,11 @@
 var Category = React.createClass({
   handleClick: function() {
-    var category = this.refs.item.dataset.category;
-    this.props.byCategory(null, category);
+    this.props.byCategory(null, this.props.category);
   },
   render: function() {
     var category = this.props.category.slice(0, -1);
     return (
-      <li data-category={this.props.category} ref="item">
+      <li>
         <a href="#" onClick={this.handleClick}>{category}</a>
       </li>
     );
