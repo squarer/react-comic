@@ -70,6 +70,7 @@ var Wrapper = React.createClass({
         <div className="col-md-offset-3 col-md-6">
           <SearchBar url={this.props.url} onSearch={this.props.byTitle} />
         </div>
+      <Spinner />
       </div>
       <div className="row">
         <Content catalogs={this.props.catalogs} />
@@ -178,6 +179,9 @@ var Main = React.createClass({
     this.handleSearch();
   },
   handleSearch: function(title, category) {
+    var spinner = document.querySelector('.spinner');
+    $(spinner).show();
+
     var url = this.props.host + '/catalog?';
     if (title) {
       url += 'title=' + title.trim() + '&';
@@ -190,6 +194,7 @@ var Main = React.createClass({
       dataType: 'json',
       success: function(catalogs) {
         this.setState({catalogs: catalogs});
+        $(spinner).fadeOut();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -202,6 +207,20 @@ var Main = React.createClass({
       <div>
         <Navbar url={host + '/category'} byCategory={this.handleSearch} />
         <Wrapper url={host + '/catalog'} byTitle={this.handleSearch} catalogs={this.state.catalogs}/>
+      </div>
+    );
+  }
+});
+
+var Spinner = React.createClass({
+  render: function() {
+    return(
+      <div className="spinner">
+        <div className="rect1"></div>
+        <div className="rect2"></div>
+        <div className="rect3"></div>
+        <div className="rect4"></div>
+        <div className="rect5"></div>
       </div>
     );
   }
