@@ -171,9 +171,10 @@ var SearchBar = React.createClass({
 var Catalog = React.createClass({
   render: function() {
     return (
-      <div className="col-md-2 col-sm-3 col-xs-4 thumb">
-        <a className="thumbnail" href="#">
-          <img className="img-responsive image" src={this.props.catalog.thumbnailurl} />
+      <div className="col-md-2 col-sm-3 col-xs-4">
+        <a href="#">
+          <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+          <p>{this.props.catalog.title}</p>
         </a>
       </div>
     );
