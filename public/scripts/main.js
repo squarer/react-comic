@@ -261,6 +261,7 @@ var Main = React.createClass({
           category={this.state.category}
           more={this.state.more}
         />
+        <div className="footer"></div>
       </div>
     );
   }

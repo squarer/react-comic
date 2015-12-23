@@ -2,6 +2,17 @@ body {
   margin: 0;
 }
 
+.footer {
+  position: relative;
+  margin-top: 40px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #767676;
+  border-top: 1px solid #eee;
+}
+
 .img-responsive {
   zoom: 1.5;
   border: 1px solid #444;
