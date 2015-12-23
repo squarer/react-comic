@@ -62,21 +62,46 @@ var Navbar = React.createClass({
 });
 
 var Wrapper = React.createClass({
- render: function() {
-  return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-offset-3 col-md-6">
-          <SearchBar url={this.props.url} onSearch={this.props.byTitle} />
+  handleLoadMore: function() {
+    this.props.byTitle(this.props.title, this.props.category, true);
+  },
+  render: function() {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col-md-offset-3 col-md-6">
+            <SearchBar url={this.props.url} onSearch={this.props.byTitle} />
+          </div>
+        <Spinner />
         </div>
-      <Spinner />
+        <div className="row">
+          <Content catalogs={this.props.catalogs} />
+        </div>
+        <div className="clearfix"></div>
+        {this.props.more ? <LoadMore loadMore={this.handleLoadMore} /> : <NoMore />}
       </div>
-      <div className="row">
-        <Content catalogs={this.props.catalogs} />
+    );
+  }
+});
+
+var LoadMore = React.createClass({
+  render: function() {
+    return (
+      <button type="button" className="btn btn-default" onClick={this.props.loadMore}>
+        load more...
+      </button>
+    );
+  }
+});
+
+var NoMore = React.createClass({
+  render: function() {
+    return (
+      <div className="alert alert-warning" role="alert">
+        All items have been loaded
       </div>
-    </div>
-  );
- }
+    );
+  }
 });
 
 var SearchBar = React.createClass({
@@ -172,12 +197,18 @@ var Content = React.createClass({
 
 var Main = React.createClass({
   getInitialState: function() {
-    return {catalogs: []};
+    return {
+      catalogs: [],
+      title: null,
+      category: null,
+      skip: limit,
+      more: true
+    };
   },
   componentDidMount: function() {
     this.handleSearch();
   },
-  handleSearch: function(title, category) {
+  handleSearch: function(title, category, loadMore = false) {
     var spinner = document.querySelector('.spinner');
     $(spinner).show();
 
@@ -186,13 +217,30 @@ var Main = React.createClass({
       url += 'title=' + title.trim() + '&';
     }
     if (category) {
-      url += 'category=' + category;
+      url += 'category=' + category + '&';
     }
+    if (loadMore) {
+      url += 'skip=' + this.state.skip + '&';
+      this.setState({skip: this.state.skip + limit});
+    } else {
+      this.setState({skip: limit});
+    }
+    url += 'limit=' + parseInt(limit + 1);
     $.ajax({
       url: url,
       dataType: 'json',
       success: function(catalogs) {
-        this.setState({catalogs: catalogs});
+        if (catalogs.length <= limit) {
+          this.setState({more: false});
+        } else {
+          catalogs.splice(-1, 1);
+          this.setState({more: true});
+        }
+        this.setState({
+          catalogs: loadMore ? this.state.catalogs.concat(catalogs) : catalogs,
+          title: title,
+          category: category
+        });
         $(spinner).fadeOut();
       }.bind(this),
       error: function(xhr, status, err) {
@@ -205,7 +253,14 @@ var Main = React.createClass({
     return (
       <div>
         <Navbar url={host + '/category'} byCategory={this.handleSearch} />
-        <Wrapper url={host + '/catalog'} byTitle={this.handleSearch} catalogs={this.state.catalogs}/>
+        <Wrapper
+          url={host + '/catalog'}
+          byTitle={this.handleSearch}
+          catalogs={this.state.catalogs}
+          title={this.state.title}
+          category={this.state.category}
+          more={this.state.more}
+        />
       </div>
     );
   }
@@ -226,6 +281,7 @@ var Spinner = React.createClass({
 });
 
 var host = document.querySelector('#container').dataset.host;
+var limit = 30;
 
 ReactDOM.render(
   <Main host={host} />,
