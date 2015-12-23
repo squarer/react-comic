@@ -87,7 +87,7 @@ var Wrapper = React.createClass({
 var LoadMore = React.createClass({
   render: function() {
     return (
-      <button type="button" className="btn btn-default" onClick={this.props.loadMore}>
+      <button type="button" id="loadMore" className="btn btn-default" onClick={this.props.loadMore}>
         load more...
       </button>
     );
@@ -210,6 +210,7 @@ var Main = React.createClass({
   },
   handleSearch: function(title, category, loadMore = false) {
     var spinner = document.querySelector('.spinner');
+    var loadMoreButton = document.querySelector('#loadMore');
     $(spinner).show();
 
     var url = this.props.host + '/catalog?';
@@ -222,6 +223,7 @@ var Main = React.createClass({
     if (loadMore) {
       url += 'skip=' + this.state.skip + '&';
       this.setState({skip: this.state.skip + limit});
+      $(loadMoreButton).button('loading');
     } else {
       this.setState({skip: limit});
     }
@@ -235,6 +237,7 @@ var Main = React.createClass({
         } else {
           catalogs.splice(-1, 1);
           this.setState({more: true});
+          $(loadMoreButton).button('reset');
         }
         this.setState({
           catalogs: loadMore ? this.state.catalogs.concat(catalogs) : catalogs,
