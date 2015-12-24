@@ -174,8 +174,10 @@ var Catalog = React.createClass({
     return (
       <div className="col-md-2 col-sm-3 col-xs-4">
         <a href="#">
-          <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
-          <p>{this.props.catalog.title}</p>
+          <div className="crop">
+            <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+          </div>
+          <p className="caption">{this.props.catalog.title}</p>
         </a>
       </div>
     );

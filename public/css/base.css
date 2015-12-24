@@ -13,6 +13,15 @@ body {
   border-top: 1px solid #eee;
 }
 
+.crop {
+  height: 150px;
+  overflow: hidden;
+}
+
+.crop img {
+  height: 110px;
+}
+
 .img-responsive {
   zoom: 1.5;
   border: 1px solid #444;
