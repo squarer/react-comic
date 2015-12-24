@@ -1,5 +1,6 @@
 var Category = React.createClass({
   handleClick: function() {
+    $('.grid').addClass('blur');
     this.props.byCategory(null, this.props.category);
   },
   render: function() {
@@ -74,7 +75,7 @@ var Wrapper = React.createClass({
           </div>
         <Spinner />
         </div>
-        <div className="row">
+        <div className="row grid">
           <Content catalogs={this.props.catalogs} />
         </div>
         <div className="clearfix"></div>
@@ -189,7 +190,7 @@ var Content = React.createClass({
       );
     });
     return (
-      <div className="grid">
+      <div>
         {gridNodes}
       </div>
     );
@@ -245,6 +246,7 @@ var Main = React.createClass({
           title: title,
           category: category
         });
+        $('.grid').removeClass('blur');
         $(spinner).fadeOut();
       }.bind(this),
       error: function(xhr, status, err) {
