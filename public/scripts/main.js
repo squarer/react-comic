@@ -79,6 +79,7 @@ var Wrapper = React.createClass({
           <Content catalogs={this.props.catalogs} />
         </div>
         <div className="clearfix"></div>
+        <ReturnTop />
         {this.props.more ? <LoadMore loadMore={this.handleLoadMore} /> : <NoMore />}
       </div>
     );
@@ -90,6 +91,23 @@ var LoadMore = React.createClass({
     return (
       <button type="button" id="loadMore" className="btn btn-default" onClick={this.props.loadMore}>
         load more...
+      </button>
+    );
+  }
+});
+
+var ReturnTop = React.createClass({
+  returntop: function() {
+    var $body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
+    $body.animate({
+      scrollTop: 0
+    }, 600);
+  },
+  render: function() {
+    return (
+      <button type="button" className="btn btn-default returnTop" onClick={this.returntop}>
+        <span className="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+        上去囉
       </button>
     );
   }

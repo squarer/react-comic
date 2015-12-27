@@ -128,3 +128,13 @@ body {
     -webkit-transform: scaleY(1.0);
   }
 }
+
+.returnTop {
+  position: fixed;
+  zoom: 1.5;
+  top: 90%;
+  left: 80%;
+  border-radius: 4px;
+  color: #fff;
+  background: rgba(232, 24, 7, 0.73);
+}
