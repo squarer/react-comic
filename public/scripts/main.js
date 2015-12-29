@@ -225,6 +225,7 @@ var Main = React.createClass({
     this.navigate();
   },
   navigate: function() {
+    $('.grid').addClass('blur');
     var url = window.location.hash.substring(1);
     if (!url) {
       this.handleSearch();
