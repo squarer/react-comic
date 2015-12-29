@@ -1,13 +1,9 @@
 var Category = React.createClass({
-  handleClick: function() {
-    $('.grid').addClass('blur');
-    this.props.byCategory(null, this.props.category);
-  },
   render: function() {
     var category = this.props.category.slice(0, -1);
     return (
       <li>
-        <a href="#" onClick={this.handleClick}>{category}</a>
+        <a href={'#/catalog?category=' + this.props.category}>{category}</a>
       </li>
     );
   }
@@ -36,7 +32,7 @@ var Navbar = React.createClass({
     var that = this;
     var categoryNodes = this.state.categories.map(function(category, index) {
       return (
-        <Category category={category} key={index} byCategory={that.props.byCategory}/>
+        <Category category={category} key={index} />
       );
     });
     return (
@@ -64,14 +60,14 @@ var Navbar = React.createClass({
 
 var Wrapper = React.createClass({
   handleLoadMore: function() {
-    this.props.byTitle(this.props.title, this.props.category, true);
+    this.props.onSearch(this.props.query, true);
   },
   render: function() {
     return (
       <div className="container">
         <div className="row">
           <div className="col-md-offset-3 col-md-6">
-            <SearchBar url={this.props.url} onSearch={this.props.byTitle} />
+            <SearchBar url={this.props.url} onSearch={this.props.onSearch} />
           </div>
         <Spinner />
         </div>
@@ -132,11 +128,11 @@ var SearchBar = React.createClass({
   },
   handleKeyDown: function(event) {
     if (event.keyCode == 13) {
-      this.props.onSearch(this.state.value);
+      setHash('/catalog?title=' + this.state.value);
     }
   },
   handleClick: function() {
-    this.props.onSearch(this.state.value);
+    setHash('/catalog?title=' + this.state.value);
   },
   componentDidMount: function() {
     var url = this.props.url;
@@ -221,35 +217,43 @@ var Main = React.createClass({
   getInitialState: function() {
     return {
       catalogs: [],
-      title: null,
-      category: null,
+      query: '',
       skip: limit,
       more: true
     };
   },
   componentDidMount: function() {
-    this.handleSearch();
+    window.addEventListener('hashchange', this.navigate, false);
+    this.navigate();
   },
-  handleSearch: function(title, category, loadMore = false) {
+  navigate: function() {
+    var url = window.location.hash.substring(1);
+    if (!url) {
+      this.handleSearch();
+      return;
+    }
+    var pattern = /^\/catalog\?(.*)/;
+    if (url.search(pattern) === -1) {
+      this.handleSearch();
+      return;
+    }
+    var query = url.match(pattern)[1];
+    this.handleSearch(query);
+  },
+  handleSearch: function(query, loadMore = false) {
     var spinner = document.querySelector('.spinner');
     var loadMoreButton = document.querySelector('#loadMore');
     $(spinner).show();
 
-    var url = this.props.host + '/catalog?';
-    if (title) {
-      url += 'title=' + title.trim() + '&';
-    }
-    if (category) {
-      url += 'category=' + category + '&';
-    }
+    var url = this.props.host + '/catalog?' + query;
     if (loadMore) {
-      url += 'skip=' + this.state.skip + '&';
+      url += '&skip=' + this.state.skip;
       this.setState({skip: this.state.skip + limit});
       $(loadMoreButton).button('loading');
     } else {
       this.setState({skip: limit});
     }
-    url += 'limit=' + parseInt(limit + 1);
+    url += '&limit=' + parseInt(limit + 1);
     $.ajax({
       url: url,
       dataType: 'json',
@@ -263,14 +267,13 @@ var Main = React.createClass({
         }
         this.setState({
           catalogs: loadMore ? this.state.catalogs.concat(catalogs) : catalogs,
-          title: title,
-          category: category
+          query: query
         });
         $('.grid').removeClass('blur');
         $(spinner).fadeOut();
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(url, status, err.toString());
       }.bind(this)
     });
   },
@@ -278,13 +281,12 @@ var Main = React.createClass({
     var host = this.props.host;
     return (
       <div>
-        <Navbar url={host + '/category'} byCategory={this.handleSearch} />
+        <Navbar url={host + '/category'} />
         <Wrapper
           url={host + '/catalog'}
-          byTitle={this.handleSearch}
+          onSearch={this.handleSearch}
           catalogs={this.state.catalogs}
-          title={this.state.title}
-          category={this.state.category}
+          query={this.state.query}
           more={this.state.more}
         />
         <div className="footer"></div>
@@ -309,6 +311,10 @@ var Spinner = React.createClass({
 
 var host = document.querySelector('#container').dataset.host;
 var limit = 30;
+
+function setHash(hash) {
+  window.location.hash = hash;
+}
 
 ReactDOM.render(
   <Main host={host} />,
