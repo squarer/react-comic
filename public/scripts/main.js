@@ -29,7 +29,6 @@ var Navbar = React.createClass({
     this.loadCategories();
   },
   render: function() {
-    var that = this;
     var categoryNodes = this.state.categories.map(function(category, index) {
       return (
         <Category category={category} key={index} />
@@ -157,10 +156,9 @@ var SearchBar = React.createClass({
       }
     });
 
-    var that = this;
     $('.typeahead').bind('typeahead:select', function(event, suggestion) {
-      that.handleChange(event);
-    });
+      this.handleChange(event);
+    }.bind(this));
   },
   render: function() {
     return (
