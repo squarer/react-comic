@@ -4,8 +4,8 @@ body {
 
 .footer {
   position: relative;
-  margin-top: 40px;
-  padding-top: 40px;
+  margin-top: 100px;
+  padding-top: 100px;
   padding-bottom: 40px;
   font-size: 12px;
   line-height: 1.5;
@@ -137,4 +137,8 @@ body {
   border-radius: 4px;
   color: #fff;
   background: rgba(232, 24, 7, 0.73);
+}
+
+.misc {
+  margin-top: 30px;
 }

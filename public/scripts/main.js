@@ -71,11 +71,15 @@ var Wrapper = React.createClass({
         <Spinner />
         </div>
         <div className="row grid">
-          <Content catalogs={this.props.catalogs} />
+          <Content
+            catalogs={this.props.catalogs}
+            catalog={this.props.catalog}
+            lookup={this.props.lookup}
+            more={this.props.more}
+            handleLoadMore={this.handleLoadMore}
+          />
         </div>
-        <div className="clearfix"></div>
         <ReturnTop />
-        {this.props.more ? <LoadMore loadMore={this.handleLoadMore} /> : <NoMore />}
       </div>
     );
   }
@@ -87,6 +91,16 @@ var LoadMore = React.createClass({
       <button type="button" id="loadMore" className="btn btn-default" onClick={this.props.loadMore}>
         load more...
       </button>
+    );
+  }
+});
+
+var NoMore = React.createClass({
+  render: function() {
+    return (
+      <div className="alert alert-warning" role="alert">
+        All items have been loaded
+      </div>
     );
   }
 });
@@ -104,16 +118,6 @@ var ReturnTop = React.createClass({
         <span className="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
         上去囉
       </button>
-    );
-  }
-});
-
-var NoMore = React.createClass({
-  render: function() {
-    return (
-      <div className="alert alert-warning" role="alert">
-        All items have been loaded
-      </div>
     );
   }
 });
@@ -185,12 +189,30 @@ var Catalog = React.createClass({
   render: function() {
     return (
       <div className="col-md-2 col-sm-3 col-xs-4">
-        <a href="#">
+        <a href={'#/catalog/' + this.props.catalog._id}>
           <div className="crop">
             <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
           </div>
           <p className="caption">{this.props.catalog.title}</p>
         </a>
+      </div>
+    );
+  }
+});
+
+var CatalogDetail = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <div className="col-md-offset-3 col-md-3 crop">
+          <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+        </div>
+        <div className="col-md-3">
+          <p>category: {this.props.catalog.category}</p>
+          <p>title: {this.props.catalog.title}</p>
+          <p>author: {this.props.catalog.author}</p>
+          <p>updatedAt: {this.props.catalog.updatedAt}</p>
+        </div>
       </div>
     );
   }
@@ -204,9 +226,15 @@ var Content = React.createClass({
       );
     });
     return (
+      this.props.lookup == 'catalog' ?
       <div>
         {gridNodes}
-      </div>
+        <div className="clearfix"></div>
+        <div className="misc">
+          {this.props.more ? <LoadMore loadMore={this.props.handleLoadMore} /> : <NoMore />}
+        </div>
+      </div> :
+      <CatalogDetail catalog={this.props.catalog} />
     );
   }
 });
@@ -215,9 +243,11 @@ var Main = React.createClass({
   getInitialState: function() {
     return {
       catalogs: [],
+      catalog: {},
       query: '',
       skip: limit,
-      more: true
+      more: true,
+      lookup: 'catalog'
     };
   },
   componentDidMount: function() {
@@ -225,12 +255,18 @@ var Main = React.createClass({
     this.navigate();
   },
   navigate: function() {
-    $('.grid').addClass('blur');
     var url = window.location.hash.substring(1);
     if (!url) {
       this.handleSearch();
       return;
     }
+    var pattern = /(^\/catalog\/.*)/;
+    if (url.search(pattern) !== -1) {
+      var query = url.match(pattern)[1];
+      this.loadCatalog(query);
+      return;
+    }
+
     var pattern = /^\/catalog\?(.*)/;
     if (url.search(pattern) === -1) {
       this.handleSearch();
@@ -239,7 +275,22 @@ var Main = React.createClass({
     var query = url.match(pattern)[1];
     this.handleSearch(query);
   },
+  loadCatalog: function(query) {
+    this.setState({lookup: 'catalogDetail'});
+    var url = this.props.host + query;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      success: function(catalog) {
+        this.setState({catalog: catalog[0]});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+      }.bind(this)
+    });
+  },
   handleSearch: function(query, loadMore = false) {
+    this.setState({lookup: 'catalog'});
     var spinner = document.querySelector('.spinner');
     var loadMoreButton = document.querySelector('#loadMore');
     $(spinner).show();
@@ -250,6 +301,7 @@ var Main = React.createClass({
       this.setState({skip: this.state.skip + limit});
       $(loadMoreButton).button('loading');
     } else {
+      $('.grid').addClass('blur');
       this.setState({skip: limit});
     }
     url += '&limit=' + parseInt(limit + 1);
@@ -266,7 +318,8 @@ var Main = React.createClass({
         }
         this.setState({
           catalogs: loadMore ? this.state.catalogs.concat(catalogs) : catalogs,
-          query: query
+          query: query,
+          catalog: {}
         });
         $('.grid').removeClass('blur');
         $(spinner).fadeOut();
@@ -285,8 +338,10 @@ var Main = React.createClass({
           url={host + '/catalog'}
           onSearch={this.handleSearch}
           catalogs={this.state.catalogs}
+          catalog={this.state.catalog}
           query={this.state.query}
           more={this.state.more}
+          lookup={this.state.lookup}
         />
         <div className="footer"></div>
       </div>
