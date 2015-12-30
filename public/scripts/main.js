@@ -74,6 +74,7 @@ var Wrapper = React.createClass({
           <Content
             catalogs={this.props.catalogs}
             catalog={this.props.catalog}
+            chapters={this.props.chapters}
             lookup={this.props.lookup}
             more={this.props.more}
             handleLoadMore={this.handleLoadMore}
@@ -200,18 +201,39 @@ var Catalog = React.createClass({
   }
 });
 
-var CatalogDetail = React.createClass({
+var Chapter = React.createClass({
   render: function() {
     return (
+      <div className="col-md-2">
+        <a href="#">{this.props.chapter.title}</a>
+      </div>
+    );
+  }
+})
+
+var CatalogDetail = React.createClass({
+  render: function() {
+    var chapterNodes = this.props.chapters.map(function(chapter, index) {
+      return (
+        <Chapter chapter={chapter} key={index} />
+      );
+    });
+    return (
       <div>
-        <div className="col-md-offset-3 col-md-3 crop">
-          <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+        <div className="detail">
+          <div className="col-md-offset-3 col-md-3 crop">
+            <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+          </div>
+          <div className="col-md-3">
+            <p>category: {this.props.catalog.category}</p>
+            <p>title: {this.props.catalog.title}</p>
+            <p>author: {this.props.catalog.author}</p>
+            <p>updatedAt: {this.props.catalog.updatedAt}</p>
+          </div>
+          <div className="col-md-3"></div>
         </div>
-        <div className="col-md-3">
-          <p>category: {this.props.catalog.category}</p>
-          <p>title: {this.props.catalog.title}</p>
-          <p>author: {this.props.catalog.author}</p>
-          <p>updatedAt: {this.props.catalog.updatedAt}</p>
+        <div className="col-md-12 chapter">
+          {chapterNodes}
         </div>
       </div>
     );
@@ -234,7 +256,7 @@ var Content = React.createClass({
           {this.props.more ? <LoadMore loadMore={this.props.handleLoadMore} /> : <NoMore />}
         </div>
       </div> :
-      <CatalogDetail catalog={this.props.catalog} />
+      <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />
     );
   }
 });
@@ -244,6 +266,7 @@ var Main = React.createClass({
     return {
       catalogs: [],
       catalog: {},
+      chapters: [],
       query: '',
       skip: limit,
       more: true,
@@ -264,6 +287,7 @@ var Main = React.createClass({
     if (url.search(pattern) !== -1) {
       var query = url.match(pattern)[1];
       this.loadCatalog(query);
+      this.loadChapters(query);
       return;
     }
 
@@ -282,7 +306,25 @@ var Main = React.createClass({
       url: url,
       dataType: 'json',
       success: function(catalog) {
-        this.setState({catalog: catalog[0]});
+        this.setState({catalog: catalog[0], catalogs: []});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  loadChapters: function(query) {
+    var spinner = document.querySelector('.spinner');
+    $(spinner).addClass('spinner-down');
+    $(spinner).show();
+    var url = this.props.host + query + '/chapter';
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      success: function(chapters) {
+        this.setState({chapters: chapters});
+        $(spinner).fadeOut();
+        $(spinner).removeClass('spinner-down');
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err.toString());
@@ -339,6 +381,7 @@ var Main = React.createClass({
           onSearch={this.handleSearch}
           catalogs={this.state.catalogs}
           catalog={this.state.catalog}
+          chapters={this.state.chapters}
           query={this.state.query}
           more={this.state.more}
           lookup={this.state.lookup}
