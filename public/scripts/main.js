@@ -306,7 +306,7 @@ var Main = React.createClass({
       url: url,
       dataType: 'json',
       success: function(catalog) {
-        this.setState({catalog: catalog[0], catalogs: []});
+        this.setState({catalog: catalog[0], catalogs: [], chapters: []});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err.toString());
