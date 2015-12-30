@@ -324,7 +324,6 @@ var Main = React.createClass({
       success: function(chapters) {
         this.setState({chapters: chapters});
         $(spinner).fadeOut();
-        $(spinner).removeClass('spinner-down');
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err.toString());
@@ -335,6 +334,7 @@ var Main = React.createClass({
     this.setState({lookup: 'catalog'});
     var spinner = document.querySelector('.spinner');
     var loadMoreButton = document.querySelector('#loadMore');
+    $(spinner).removeClass('spinner-down');
     $(spinner).show();
 
     var url = this.props.host + '/catalog?' + query;
