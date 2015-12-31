@@ -99,7 +99,7 @@ var LoadMore = React.createClass({
 var NoMore = React.createClass({
   render: function() {
     return (
-      <div className="alert alert-warning" role="alert">
+      <div className="alert alert-warning text-center" role="alert">
         All items have been loaded
       </div>
     );
@@ -190,7 +190,7 @@ var Catalog = React.createClass({
   render: function() {
     return (
       <div className="col-md-2 col-sm-3 col-xs-4">
-        <a href={'#/catalog/' + this.props.catalog._id}>
+        <a href={'#/catalog/' + this.props.catalog._id + '/'}>
           <div className="crop">
             <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
           </div>
@@ -205,7 +205,9 @@ var Chapter = React.createClass({
   render: function() {
     return (
       <div className="col-md-1 col-sm-2 col-xs-3">
-        <a href="#">{this.props.chapter.title}</a>
+        <a href={'#/catalog/' + this.props.catalogId + '/chapter/' + this.props.chapter._id} target="_blank">
+          {this.props.chapter.title}
+        </a>
       </div>
     );
   }
@@ -215,9 +217,9 @@ var CatalogDetail = React.createClass({
   render: function() {
     var chapterNodes = this.props.chapters.map(function(chapter, index) {
       return (
-        <Chapter chapter={chapter} key={index} />
+        <Chapter catalogId={this.props.catalog._id} chapter={chapter} key={index} />
       );
-    });
+    }.bind(this));
     return (
       <div>
         <div className="detail">
@@ -256,7 +258,11 @@ var Content = React.createClass({
           {this.props.more ? <LoadMore loadMore={this.props.handleLoadMore} /> : <NoMore />}
         </div>
       </div> :
-      <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />
+        this.props.catalog === undefined ?
+        <div className="alert alert-danger text-center" role="alert">
+          No results Found
+        </div> :
+        <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />
     );
   }
 });
@@ -283,21 +289,24 @@ var Main = React.createClass({
       this.handleSearch();
       return;
     }
-    var pattern = /(^\/catalog\/.*)/;
+
+    // catch route to specific catalog, ex. /catalog/xxx/
+    var pattern = /(^\/catalog\/\w+)\/$/;
     if (url.search(pattern) !== -1) {
       var query = url.match(pattern)[1];
       this.loadCatalog(query);
-      this.loadChapters(query);
       return;
     }
 
+    // catch route to query catalogs
+    // ex. /catalog?title=xxx, /catalog?category=xxx
     var pattern = /^\/catalog\?(.*)/;
-    if (url.search(pattern) === -1) {
-      this.handleSearch();
+    if (url.search(pattern) !== -1) {
+      var query = url.match(pattern)[1];
+      this.handleSearch(query);
       return;
     }
-    var query = url.match(pattern)[1];
-    this.handleSearch(query);
+    this.handleSearch();
   },
   loadCatalog: function(query) {
     var url = this.props.host + query;
@@ -311,6 +320,10 @@ var Main = React.createClass({
           chapters: [],
           lookup: 'catalogDetail'
       });
+      if (catalog.length === 0) {
+        return;
+      }
+      this.loadChapters(query);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err.toString());
