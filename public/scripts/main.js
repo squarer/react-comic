@@ -300,13 +300,17 @@ var Main = React.createClass({
     this.handleSearch(query);
   },
   loadCatalog: function(query) {
-    this.setState({lookup: 'catalogDetail'});
     var url = this.props.host + query;
     $.ajax({
       url: url,
       dataType: 'json',
       success: function(catalog) {
-        this.setState({catalog: catalog[0], catalogs: [], chapters: []});
+        this.setState({
+          catalog: catalog[0],
+          catalogs: [],
+          chapters: [],
+          lookup: 'catalogDetail'
+      });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err.toString());
@@ -331,7 +335,6 @@ var Main = React.createClass({
     });
   },
   handleSearch: function(query, loadMore = false) {
-    this.setState({lookup: 'catalog'});
     var spinner = document.querySelector('.spinner');
     var loadMoreButton = document.querySelector('#loadMore');
     $(spinner).removeClass('spinner-down');
@@ -340,28 +343,28 @@ var Main = React.createClass({
     var url = this.props.host + '/catalog?' + query;
     if (loadMore) {
       url += '&skip=' + this.state.skip;
-      this.setState({skip: this.state.skip + limit});
       $(loadMoreButton).button('loading');
     } else {
       $('.grid').addClass('blur');
-      this.setState({skip: limit});
     }
     url += '&limit=' + parseInt(limit + 1);
     $.ajax({
       url: url,
       dataType: 'json',
       success: function(catalogs) {
-        if (catalogs.length <= limit) {
-          this.setState({more: false});
-        } else {
+        var more = false;
+        if (catalogs.length > limit) {
+          more = true;
           catalogs.splice(-1, 1);
-          this.setState({more: true});
           $(loadMoreButton).button('reset');
         }
         this.setState({
           catalogs: loadMore ? this.state.catalogs.concat(catalogs) : catalogs,
           query: query,
-          catalog: {}
+          catalog: {},
+          lookup: 'catalog',
+          skip: loadMore ? this.state.skip + limit : limit,
+          more: more
         });
         $('.grid').removeClass('blur');
         $(spinner).fadeOut();
