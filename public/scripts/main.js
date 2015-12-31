@@ -63,28 +63,42 @@ var Wrapper = React.createClass({
   },
   render: function() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-offset-3 col-md-6">
-            <SearchBar url={this.props.url} onSearch={this.props.onSearch} />
+      this.props.lookup === '404'
+      ? <NotFound />
+      : <div className="container">
+          <div className="row">
+            <div className="col-md-offset-3 col-md-6">
+              <SearchBar url={this.props.url} onSearch={this.props.onSearch} />
+            </div>
+          <Spinner />
           </div>
-        <Spinner />
+          <div className="row grid">
+            <Content
+              catalogs={this.props.catalogs}
+              catalog={this.props.catalog}
+              chapters={this.props.chapters}
+              lookup={this.props.lookup}
+              more={this.props.more}
+              handleLoadMore={this.handleLoadMore}
+            />
+          </div>
+          <ReturnTop />
         </div>
-        <div className="row grid">
-          <Content
-            catalogs={this.props.catalogs}
-            catalog={this.props.catalog}
-            chapters={this.props.chapters}
-            lookup={this.props.lookup}
-            more={this.props.more}
-            handleLoadMore={this.handleLoadMore}
-          />
-        </div>
-        <ReturnTop />
-      </div>
     );
   }
 });
+
+var NotFound = React.createClass({
+  render: function() {
+    return (
+      <div className="error-page text-center">
+        <h1>404</h1>
+        <span>Find </span>
+        <a href="https://github.com/vivalalova/comic-express">this guy</a>
+      </div>
+    );
+  }
+})
 
 var LoadMore = React.createClass({
   render: function() {
@@ -250,19 +264,19 @@ var Content = React.createClass({
       );
     });
     return (
-      this.props.lookup == 'catalog' ?
-      <div>
-        {gridNodes}
-        <div className="clearfix"></div>
-        <div className="misc">
-          {this.props.more ? <LoadMore loadMore={this.props.handleLoadMore} /> : <NoMore />}
-        </div>
-      </div> :
-        this.props.catalog === undefined ?
-        <div className="alert alert-danger text-center" role="alert">
-          No results Found
-        </div> :
-        <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />
+      this.props.lookup == 'catalog'
+        ? <div>
+            {gridNodes}
+            <div className="clearfix"></div>
+            <div className="misc">
+              {this.props.more ? <LoadMore loadMore={this.props.handleLoadMore} /> : <NoMore />}
+            </div>
+          </div>
+        : this.props.catalog === undefined
+          ? <div className="alert alert-danger text-center" role="alert">
+              No results Found
+            </div>
+          : <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />
     );
   }
 });
@@ -306,7 +320,8 @@ var Main = React.createClass({
       this.handleSearch(query);
       return;
     }
-    this.handleSearch();
+
+    this.setState({lookup: '404'});
   },
   loadCatalog: function(query) {
     var url = this.props.host + query;
