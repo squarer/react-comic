@@ -204,7 +204,7 @@ var Catalog = React.createClass({
 var Chapter = React.createClass({
   render: function() {
     return (
-      <div className="col-md-2">
+      <div className="col-md-1 col-sm-2 col-xs-3">
         <a href="#">{this.props.chapter.title}</a>
       </div>
     );
