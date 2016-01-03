@@ -442,6 +442,9 @@ var limit = 30;
 
 function setHash(hash) {
   window.location.hash = hash;
+  var href = window.location.href;
+  href = href.slice(0, href.indexOf('#') + 1) + hash;
+  window.location.href = href;
 }
 
 ReactDOM.render(
