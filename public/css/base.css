@@ -146,6 +146,7 @@ body {
   border-radius: 4px;
   color: #fff;
   background: rgba(232, 24, 7, 0.73);
+  z-index: 9999;
 }
 
 .misc {
