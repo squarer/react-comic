@@ -77,6 +77,8 @@ var Wrapper = React.createClass({
               catalogs={this.props.catalogs}
               catalog={this.props.catalog}
               chapters={this.props.chapters}
+              pages={this.props.pages}
+              pageIndex={this.props.pageIndex}
               lookup={this.props.lookup}
               more={this.props.more}
               handleLoadMore={this.handleLoadMore}
@@ -216,16 +218,20 @@ var Catalog = React.createClass({
 });
 
 var Chapter = React.createClass({
+  getUrl: function() {
+    return '/catalog/' + this.props.catalogId + '/chapter/' + this.props.chapter._id + '/page/';
+  },
   render: function() {
+    var url = '#' + this.getUrl();
     return (
       <div className="col-md-1 col-sm-2 col-xs-3">
-        <a href={'#/catalog/' + this.props.catalogId + '/chapter/' + this.props.chapter._id} target="_blank">
+        <a href={url}>
           {this.props.chapter.title}
         </a>
       </div>
     );
   }
-})
+});
 
 var CatalogDetail = React.createClass({
   render: function() {
@@ -276,7 +282,116 @@ var Content = React.createClass({
           ? <div className="alert alert-danger text-center" role="alert">
               No results Found
             </div>
-          : <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />
+          : this.props.lookup == 'page'
+            ? <Page pages={this.props.pages} pageIndex={this.props.pageIndex} />
+            : <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />
+    );
+  }
+});
+
+var Page = React.createClass({
+  componentDidMount: function() {
+    var img = document.querySelector('.page-img');
+    img.onload = function() {
+      var spinner = document.querySelector('.spinner');
+      $(spinner).fadeOut();
+    };
+  },
+  componentWillUpdate: function() {
+    var spinner = document.querySelector('.spinner');
+    $(spinner).addClass('spinner-down');
+    $(spinner).show();
+  },
+  render: function() {
+    var index = this.props.pageIndex < 1 ? 1 : this.props.pageIndex;
+    var url = this.props.pages[index - 1];
+    return (
+      <div>
+        <div className="page text-center">
+          <img className="page-img" src={url} />
+        </div>
+        <div className="text-center">
+          <Pagination pages={this.props.pages} currentIndex={index} />
+        </div>
+      </div>
+    );
+  }
+});
+
+var Pagination = React.createClass({
+  render: function() {
+    var paginationNodes = this.props.pages.map(function(page, index) {
+      return (
+        <PaginationItem page={page} index={index + 1} currentIndex={this.props.currentIndex} key={index} />
+      );
+    }.bind(this));
+    return (
+      <ul className="pagination">
+        <PrevPage currentIndex={this.props.currentIndex} />
+        {paginationNodes}
+        <NextPage currentIndex={this.props.currentIndex} lastIndex={this.props.pages.length} />
+      </ul>
+    );
+  }
+});
+
+var PrevPage = React.createClass({
+  getUrl: function() {
+    var href = window.location.href;
+    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + (this.props.currentIndex - 1) + '/';
+    return href;
+  },
+  isFirstPage: function() {
+    return this.props.currentIndex == 1;
+  },
+  render: function() {
+    console.log(this.isFirstPage());
+    return (
+      <li className={this.isFirstPage() ? 'disabled' : ''}>
+        <a href={this.getUrl()}  aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    );
+  }
+});
+
+var NextPage = React.createClass({
+  getUrl: function() {
+    var href = window.location.href;
+    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + (parseInt(this.props.currentIndex) + 1) + '/';
+    return href;
+  },
+  isLastPage: function() {
+    return this.props.currentIndex == this.props.lastIndex;
+  },
+  render: function() {
+    return (
+      <li className={this.isLastPage() ? 'disabled' : ''}>
+        <a href={this.getUrl()} aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+    </li>
+    );
+  }
+});
+
+var PaginationItem = React.createClass({
+  getUrl: function() {
+    var href = window.location.href;
+    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + this.props.index + '/';
+    return href;
+  },
+  isCurrentPage: function() {
+    return this.props.currentIndex == this.props.index;
+  },
+  render: function() {
+    return (
+      <li className={this.isCurrentPage() ? 'active' : ''}>
+        <a href={this.getUrl()}>
+          {this.props.index}
+        </a>
+      </li>
     );
   }
 });
@@ -287,6 +402,8 @@ var Main = React.createClass({
       catalogs: [],
       catalog: {},
       chapters: [],
+      pages: [],
+      pageIndex: 1,
       query: '',
       skip: limit,
       more: true,
@@ -301,6 +418,22 @@ var Main = React.createClass({
     var url = window.location.hash.substring(1);
     if (!url) {
       this.handleSearch();
+      return;
+    }
+
+    // catch route to page, ex. /catalog/xxx/chapter/xxx/page/123/
+    var pattern = /^\/catalog\/\w+\/chapter\/\w+\/page\/(\d+)\/$/;
+    if (url.search(pattern) !== -1) {
+      var query = url.match(pattern)[1];
+      this.setState({pageIndex: query});
+      return;
+    }
+
+    // catch route to pages, ex. /catalog/xxx/chapter/xxx/page/
+    var pattern = /(^\/catalog\/\w+\/chapter\/\w+\/page)\/$/;
+    if (url.search(pattern) !== -1) {
+      var query = url.match(pattern)[1];
+      this.loadPages(query);
       return;
     }
 
@@ -322,6 +455,27 @@ var Main = React.createClass({
     }
 
     this.setState({lookup: '404'});
+  },
+  loadPages: function(query) {
+    var url = this.props.host + query;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      success: function(data) {
+        var pages = [];
+        data.forEach(function(value) {
+          pages.push(value.url);
+        });
+        this.setState({
+          pages: pages,
+          pageIndex: 1,
+          lookup: 'page'
+      });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+      }.bind(this)
+    });
   },
   loadCatalog: function(query) {
     var url = this.props.host + query;
@@ -413,6 +567,8 @@ var Main = React.createClass({
           catalogs={this.state.catalogs}
           catalog={this.state.catalog}
           chapters={this.state.chapters}
+          pages={this.state.pages}
+          pageIndex={this.state.pageIndex}
           query={this.state.query}
           more={this.state.more}
           lookup={this.state.lookup}
