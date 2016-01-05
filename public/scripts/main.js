@@ -319,6 +319,14 @@ var Page = React.createClass({
 });
 
 var Pagination = React.createClass({
+  componentDidMount: function() {
+    $('.pagination a').on('click', function(e) {
+      var className = $(this).parent('li').attr('class');
+      if (className == 'disabled' || className == 'active') {
+        e.preventDefault();
+      }
+    });
+  },
   getUrl: function(index) {
     var href = window.location.href;
     href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + index + '/';
