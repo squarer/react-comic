@@ -319,36 +319,35 @@ var Page = React.createClass({
 });
 
 var Pagination = React.createClass({
+  getUrl: function(index) {
+    var href = window.location.href;
+    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + index + '/';
+    return href;
+  },
   render: function() {
     var paginationNodes = this.props.pages.map(function(page, index) {
       return (
-        <PaginationItem page={page} index={index + 1} currentIndex={this.props.currentIndex} key={index} />
+        <PaginationItem page={page} index={index + 1} currentIndex={this.props.currentIndex} key={index} getUrl={this.getUrl} />
       );
     }.bind(this));
     return (
       <ul className="pagination">
-        <PrevPage currentIndex={this.props.currentIndex} />
+        <PrevPage currentIndex={this.props.currentIndex} getUrl={this.getUrl} />
         {paginationNodes}
-        <NextPage currentIndex={this.props.currentIndex} lastIndex={this.props.pages.length} />
+        <NextPage currentIndex={this.props.currentIndex} lastIndex={this.props.pages.length} getUrl={this.getUrl} />
       </ul>
     );
   }
 });
 
 var PrevPage = React.createClass({
-  getUrl: function() {
-    var href = window.location.href;
-    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + (this.props.currentIndex - 1) + '/';
-    return href;
-  },
   isFirstPage: function() {
     return this.props.currentIndex == 1;
   },
   render: function() {
-    console.log(this.isFirstPage());
     return (
       <li className={this.isFirstPage() ? 'disabled' : ''}>
-        <a href={this.getUrl()}  aria-label="Previous">
+        <a href={this.props.getUrl(this.props.currentIndex - 1)}  aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
@@ -357,18 +356,13 @@ var PrevPage = React.createClass({
 });
 
 var NextPage = React.createClass({
-  getUrl: function() {
-    var href = window.location.href;
-    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + (parseInt(this.props.currentIndex) + 1) + '/';
-    return href;
-  },
   isLastPage: function() {
     return this.props.currentIndex == this.props.lastIndex;
   },
   render: function() {
     return (
       <li className={this.isLastPage() ? 'disabled' : ''}>
-        <a href={this.getUrl()} aria-label="Next">
+        <a href={this.props.getUrl(parseInt(this.props.currentIndex) + 1)} aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
     </li>
@@ -377,18 +371,13 @@ var NextPage = React.createClass({
 });
 
 var PaginationItem = React.createClass({
-  getUrl: function() {
-    var href = window.location.href;
-    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + this.props.index + '/';
-    return href;
-  },
   isCurrentPage: function() {
     return this.props.currentIndex == this.props.index;
   },
   render: function() {
     return (
       <li className={this.isCurrentPage() ? 'active' : ''}>
-        <a href={this.getUrl()}>
+        <a href={this.props.getUrl(this.props.index)}>
           {this.props.index}
         </a>
       </li>
