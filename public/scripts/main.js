@@ -333,17 +333,60 @@ var Pagination = React.createClass({
     return href;
   },
   render: function() {
-    var paginationNodes = this.props.pages.map(function(page, index) {
-      return (
-        <PaginationItem page={page} index={index + 1} currentIndex={this.props.currentIndex} key={index} getUrl={this.getUrl} />
+    var pageTotal = this.props.pages.length;
+    var range = 3;
+    var lowerBound = this.props.currentIndex - range - 1;
+    var upperBound = parseInt(this.props.currentIndex) + range + 1;
+    var paginationNodes = [];
+    for (var index = 1; index <= pageTotal; ++index) {
+      if (index == 1 || index == pageTotal) {
+        paginationNodes.push(
+          <PaginationItem
+            page={this.props.pages[index - 1]}
+            index={index}
+            currentIndex={this.props.currentIndex}
+            key={index}
+            getUrl={this.getUrl}
+          />
+        );
+        continue;
+      }
+
+      if (index < lowerBound || index > upperBound) {
+        continue;
+      }
+
+      if (index == lowerBound || index == upperBound) {
+        paginationNodes.push(<Dots key={index} />);
+        continue;
+      }
+
+      paginationNodes.push(
+        <PaginationItem
+          page={this.props.pages[index - 1]}
+          index={index}
+          currentIndex={this.props.currentIndex}
+          key={index}
+          getUrl={this.getUrl}
+        />
       );
-    }.bind(this));
+    }
     return (
       <ul className="pagination">
         <PrevPage currentIndex={this.props.currentIndex} getUrl={this.getUrl} />
         {paginationNodes}
         <NextPage currentIndex={this.props.currentIndex} lastIndex={this.props.pages.length} getUrl={this.getUrl} />
       </ul>
+    );
+  }
+});
+
+var Dots = React.createClass({
+  render: function() {
+    return (
+      <li className="dots">
+        <span>...</span>
+      </li>
     );
   }
 });
@@ -467,7 +510,7 @@ var Main = React.createClass({
           pages: pages,
           pageIndex: 1,
           lookup: 'page'
-      });
+        });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err.toString());
