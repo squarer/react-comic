@@ -296,14 +296,37 @@ var Page = React.createClass({
       var spinner = document.querySelector('.spinner');
       $(spinner).fadeOut();
     };
+    img.onclick = function() {
+      var currentIndex = this.getCurrentIndex();
+      if (currentIndex === this.props.pages.length) {
+        return false;
+      }
+      window.location.href = this.getUrl(currentIndex+ 1);
+    }.bind(this);
+    img.oncontextmenu = function() {
+      var currentIndex = this.getCurrentIndex();
+      if (currentIndex === 1) {
+        return false;
+      }
+      window.location.href = this.getUrl(currentIndex - 1);
+      return false;
+    }.bind(this);
   },
   componentWillUpdate: function() {
     var spinner = document.querySelector('.spinner');
     $(spinner).addClass('spinner-down');
     $(spinner).show();
   },
+  getUrl: function(index) {
+    var href = window.location.href;
+    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + index + '/';
+    return href;
+  },
+  getCurrentIndex: function() {
+    return this.props.pageIndex < 1 ? 1 : parseInt(this.props.pageIndex);
+  },
   render: function() {
-    var index = this.props.pageIndex < 1 ? 1 : this.props.pageIndex;
+    var index = this.getCurrentIndex();
     var url = this.props.pages[index - 1];
     return (
       <div>
@@ -311,7 +334,7 @@ var Page = React.createClass({
           <img className="page-img" src={url} />
         </div>
         <div className="text-center">
-          <Pagination pages={this.props.pages} currentIndex={index} />
+          <Pagination pages={this.props.pages} currentIndex={index} getUrl={this.getUrl} />
         </div>
       </div>
     );
@@ -326,11 +349,6 @@ var Pagination = React.createClass({
         e.preventDefault();
       }
     });
-  },
-  getUrl: function(index) {
-    var href = window.location.href;
-    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + index + '/';
-    return href;
   },
   fromLeft: function(index, currentIndex, middle) {
     var sideNumber = middle * 2 + 3;
@@ -370,7 +388,7 @@ var Pagination = React.createClass({
             index={index}
             currentIndex={this.props.currentIndex}
             key={index}
-            getUrl={this.getUrl}
+            getUrl={this.props.getUrl}
           />
         );
         continue;
@@ -382,9 +400,9 @@ var Pagination = React.createClass({
     }
     return (
       <ul className="pagination">
-        <PrevPage currentIndex={this.props.currentIndex} getUrl={this.getUrl} />
+        <PrevPage currentIndex={this.props.currentIndex} getUrl={this.props.getUrl} />
         {paginationNodes}
-        <NextPage currentIndex={this.props.currentIndex} lastIndex={this.props.pages.length} getUrl={this.getUrl} />
+        <NextPage currentIndex={this.props.currentIndex} lastIndex={this.props.pages.length} getUrl={this.props.getUrl} />
       </ul>
     );
   }
