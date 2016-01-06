@@ -296,21 +296,35 @@ var Page = React.createClass({
       var spinner = document.querySelector('.spinner');
       $(spinner).fadeOut();
     };
-    img.onclick = function() {
-      var currentIndex = this.getCurrentIndex();
-      if (currentIndex === this.props.pages.length) {
-        return false;
-      }
-      window.location.href = this.getUrl(currentIndex+ 1);
-    }.bind(this);
-    img.oncontextmenu = function() {
-      var currentIndex = this.getCurrentIndex();
-      if (currentIndex === 1) {
-        return false;
-      }
-      window.location.href = this.getUrl(currentIndex - 1);
+    img.addEventListener('click', this.toNext, false);
+    img.addEventListener('contextmenu', this.toPrevious, false);
+    window.addEventListener('keydown', function(e) {
+      this.toNext(e);
+      this.toPrevious(e);
+    }.bind(this), false);
+  },
+  toNext: function(e) {
+    var keyCode = e.keyCode || 39;
+    if (keyCode !== 39 && keyCode !== 75) {
       return false;
-    }.bind(this);
+    }
+    var currentIndex = this.getCurrentIndex();
+    if (currentIndex === this.props.pages.length) {
+      return false;
+    }
+    window.location.href = this.getUrl(currentIndex+ 1);
+  },
+  toPrevious: function(e) {
+    e.preventDefault();
+    var keyCode = e.keyCode || 37;
+    if (keyCode !== 37 && keyCode !== 74) {
+      return false;
+    }
+    var currentIndex = this.getCurrentIndex();
+    if (currentIndex === 1) {
+      return false;
+    }
+    window.location.href = this.getUrl(currentIndex - 1);
   },
   componentWillUpdate: function() {
     var spinner = document.querySelector('.spinner');
