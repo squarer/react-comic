@@ -2,17 +2,6 @@ body {
   margin: 0;
 }
 
-.footer {
-  position: relative;
-  margin-top: 100px;
-  padding-top: 100px;
-  padding-bottom: 40px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #767676;
-  border-top: 1px solid #eee;
-}
-
 .crop {
   height: 150px;
   overflow: hidden;
