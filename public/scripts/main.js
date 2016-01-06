@@ -332,14 +332,38 @@ var Pagination = React.createClass({
     href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + index + '/';
     return href;
   },
+  fromLeft: function(index, currentIndex, middle) {
+    var sideNumber = middle * 2 + 3;
+    return index <= sideNumber && currentIndex <= middle + 2;
+  },
+  toRight: function(index, currentIndex, middle, total) {
+    var sideNumber = middle * 2 + 3;
+    return index > total - sideNumber && currentIndex >= total - middle - 1;
+  },
+  inMiddle: function(index, currentIndex, middle) {
+    return index >= currentIndex - middle && index <= parseInt(currentIndex) + middle;
+  },
+  isDots: function(index, total, bothEnds) {
+    return index == bothEnds + 1 || index == total - bothEnds;
+  },
+  isBothEnds: function(index, total, bothEnds) {
+    return index <= bothEnds || index > total - bothEnds;
+  },
+  shouldPrint: function(index, currentIndex, total, middle, bothEnds) {
+    return this.isBothEnds(index, total, bothEnds) ||
+      this.fromLeft(index, currentIndex, middle) ||
+      this.toRight(index, currentIndex, middle, total) ||
+      this.inMiddle(index, currentIndex, middle);
+  },
   render: function() {
-    var pageTotal = this.props.pages.length;
-    var range = 3;
-    var lowerBound = this.props.currentIndex - range - 1;
-    var upperBound = parseInt(this.props.currentIndex) + range + 1;
+    var total = this.props.pages.length;
+    var currentIndex = this.props.currentIndex;
+    var middle = 3;
+    var bothEnds = 1;
+
     var paginationNodes = [];
-    for (var index = 1; index <= pageTotal; ++index) {
-      if (index == 1 || index == pageTotal) {
+    for (var index = 1; index <= total; ++index) {
+      if (this.shouldPrint(index, currentIndex, total, middle, bothEnds)) {
         paginationNodes.push(
           <PaginationItem
             page={this.props.pages[index - 1]}
@@ -352,24 +376,9 @@ var Pagination = React.createClass({
         continue;
       }
 
-      if (index < lowerBound || index > upperBound) {
-        continue;
-      }
-
-      if (index == lowerBound || index == upperBound) {
+      if (this.isDots(index, total, bothEnds)) {
         paginationNodes.push(<Dots key={index} />);
-        continue;
       }
-
-      paginationNodes.push(
-        <PaginationItem
-          page={this.props.pages[index - 1]}
-          index={index}
-          currentIndex={this.props.currentIndex}
-          key={index}
-          getUrl={this.getUrl}
-        />
-      );
     }
     return (
       <ul className="pagination">

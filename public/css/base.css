@@ -156,3 +156,8 @@ body {
 .chapter {
   margin-top: 60px;
 }
+
+.pagination > li > a {
+  min-width: 50px;
+}
+
