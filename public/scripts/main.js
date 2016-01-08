@@ -297,7 +297,10 @@ var Page = React.createClass({
       $(spinner).fadeOut();
     };
     img.addEventListener('click', this.toNext, false);
-    img.addEventListener('contextmenu', this.toPrevious, false);
+    img.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      this.toPrevious(e);
+    }.bind(this), false);
     window.addEventListener('keydown', function(e) {
       this.toNext(e);
       this.toPrevious(e);
@@ -305,7 +308,8 @@ var Page = React.createClass({
   },
   toNext: function(e) {
     var keyCode = e.keyCode || 39;
-    if (keyCode !== 39 && keyCode !== 75) {
+    var tag = e.target.tagName.toLowerCase();
+    if (keyCode !== 39 && keyCode !== 75 || this.isInputTag(tag)) {
       return false;
     }
     var currentIndex = this.getCurrentIndex();
@@ -315,9 +319,9 @@ var Page = React.createClass({
     window.location.href = this.getUrl(currentIndex+ 1);
   },
   toPrevious: function(e) {
-    e.preventDefault();
     var keyCode = e.keyCode || 37;
-    if (keyCode !== 37 && keyCode !== 74) {
+    var tag = e.target.tagName.toLowerCase();
+    if (keyCode !== 37 && keyCode !== 74 || this.isInputTag(tag)) {
       return false;
     }
     var currentIndex = this.getCurrentIndex();
@@ -325,6 +329,9 @@ var Page = React.createClass({
       return false;
     }
     window.location.href = this.getUrl(currentIndex - 1);
+  },
+  isInputTag: function(tag) {
+    return tag === 'input' || tag === 'textarea';
   },
   componentWillUpdate: function() {
     var spinner = document.querySelector('.spinner');
@@ -382,10 +389,10 @@ var Pagination = React.createClass({
     return index <= bothEnds || index > total - bothEnds;
   },
   shouldPrint: function(index, currentIndex, total, middle, bothEnds) {
-    return this.isBothEnds(index, total, bothEnds) ||
-      this.fromLeft(index, currentIndex, middle) ||
-      this.toRight(index, currentIndex, middle, total) ||
-      this.inMiddle(index, currentIndex, middle);
+    return this.isBothEnds(index, total, bothEnds)
+      || this.fromLeft(index, currentIndex, middle)
+      || this.toRight(index, currentIndex, middle, total)
+      || this.inMiddle(index, currentIndex, middle);
   },
   render: function() {
     var total = this.props.pages.length;
