@@ -1,4 +1,3 @@
-var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var app = express();
@@ -6,6 +5,7 @@ var app = express();
 app.set('port', (process.env.PORT || 3000));
 app.set('host', (process.env.API_HOST || ''));
 app.use('/public', express.static(__dirname + '/public'));
+app.use('/built', express.static(__dirname + '/built'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 

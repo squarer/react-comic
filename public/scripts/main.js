@@ -1,3 +1,6 @@
+var React = require('react');
+var ReactDOM = require('react-dom');
+
 var Category = React.createClass({
   render: function() {
     var category = this.props.category.slice(0, -1);
