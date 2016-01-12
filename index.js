@@ -4,9 +4,9 @@ var app = express();
 
 app.set('port', (process.env.PORT || 3000));
 app.set('host', (process.env.API_HOST || ''));
-app.use('/public', express.static(__dirname + '/public'));
-app.use('/built', express.static(__dirname + '/built'));
-app.set('views', __dirname + '/views');
+app.use('/src', express.static(__dirname + '/src'));
+app.use('/dist', express.static(__dirname + '/dist'));
+app.set('views', __dirname + '/dist');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {

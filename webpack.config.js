@@ -2,17 +2,17 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  entry: './public/scripts/main.js',
+  entry: './src/main.js',
   output: {
     filename: 'bundle.js',
-    path: './built'
+    path: './dist'
   },
   module: {
     loaders: [
       {
         test: /\.js$/,
         include: [
-          path.resolve(__dirname, 'public/scripts')
+          path.resolve(__dirname, 'src')
         ],
         loader: 'babel-loader',
         query: {
