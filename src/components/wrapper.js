@@ -2,7 +2,6 @@ var React = require('react');
 var SearchBar = require('./searchBar');
 var Content = require('./content');
 var NotFound = require('./notFound');
-var ReturnTop = require('./returnTop');
 var Spinner = require('./spinner');
 
 var Wrapper = React.createClass({
@@ -32,7 +31,6 @@ var Wrapper = React.createClass({
               handleLoadMore={this.handleLoadMore}
             />
           </div>
-          <ReturnTop />
         </div>
     );
   }

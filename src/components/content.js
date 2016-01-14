@@ -4,6 +4,7 @@ var CatalogDetail = require('./catalogDetail');
 var Page = require('./page');
 var LoadMore = require('./loadMore');
 var NoMore = require('./noMore');
+var ReturnTop = require('./returnTop');
 
 var Content = React.createClass({
   render: function() {
@@ -20,6 +21,7 @@ var Content = React.createClass({
             <div className="misc">
               {this.props.more ? <LoadMore loadMore={this.props.handleLoadMore} /> : <NoMore />}
             </div>
+            <ReturnTop />
           </div>
         : this.props.catalog === undefined
           ? <div className="alert alert-danger text-center" role="alert">
