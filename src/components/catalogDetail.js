@@ -1,7 +1,11 @@
 var React = require('react');
 var Chapter = require('./chapter');
+var moment = require('moment');
 
 var CatalogDetail = React.createClass({
+  toISOFormat: function(date) {
+    return moment(date).format('YYYY-MM-DD HH:mm:ss');
+  },
   render: function() {
     var chapterNodes = this.props.chapters.map(function(chapter, index) {
       return (
@@ -18,7 +22,7 @@ var CatalogDetail = React.createClass({
             <p>category: {this.props.catalog.category}</p>
             <p>title: {this.props.catalog.title}</p>
             <p>author: {this.props.catalog.author}</p>
-            <p>updatedAt: {this.props.catalog.updatedAt}</p>
+            <p>updatedAt: {this.toISOFormat(this.props.catalog.updatedAt)}</p>
           </div>
           <div className="col-md-3"></div>
         </div>
