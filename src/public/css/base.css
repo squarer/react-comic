@@ -127,7 +127,7 @@ body {
   }
 }
 
-.returnTop {
+.return-top {
   position: fixed;
   zoom: 1.5;
   top: 90%;
@@ -136,6 +136,7 @@ body {
   color: #fff;
   background: rgba(232, 24, 7, 0.73);
   z-index: 9999;
+  display: none;
 }
 
 .misc {
