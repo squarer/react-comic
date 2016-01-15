@@ -52,7 +52,7 @@ var Page = React.createClass({
   },
   getUrl: function(index) {
     var href = window.location.href;
-    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + index + '/';
+    href = href.substring(0, href.lastIndexOf('/page/')) + '/page/' + index;
     return href;
   },
   getCurrentIndex: function() {

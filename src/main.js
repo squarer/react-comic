@@ -9,6 +9,7 @@ var Main = React.createClass({
       catalogs: [],
       catalog: {},
       chapters: [],
+      chapterId: '',
       pages: [],
       pageIndex: 1,
       query: '',
@@ -29,18 +30,16 @@ var Main = React.createClass({
     }
 
     // catch route to page, ex. /catalog/xxx/chapter/xxx/page/123/
-    var pattern = /^\/catalog\/\w+\/chapter\/\w+\/page\/(\d+)\/$/;
+    var pattern = /(^\/catalog\/\w+\/chapter\/)(\w+)\/page\/(\d+)/;
     if (url.search(pattern) !== -1) {
-      var query = url.match(pattern)[1];
-      this.setState({pageIndex: query});
-      return;
-    }
-
-    // catch route to pages, ex. /catalog/xxx/chapter/xxx/page/
-    var pattern = /(^\/catalog\/\w+\/chapter\/\w+\/page)\/$/;
-    if (url.search(pattern) !== -1) {
-      var query = url.match(pattern)[1];
-      this.loadPages(query);
+      var chapterId = url.match(pattern)[2];
+      var pageIndex = url.match(pattern)[3];
+      var query = url.match(pattern)[1] + chapterId + '/page';
+      if (chapterId === this.state.chapterId) {
+        this.setState({lookup: 'page', pageIndex: pageIndex});
+      } else {
+        this.loadPages(query, chapterId, pageIndex);
+      }
       return;
     }
 
@@ -63,7 +62,7 @@ var Main = React.createClass({
 
     this.setState({lookup: '404'});
   },
-  loadPages: function(query) {
+  loadPages: function(query, chapterId, pageIndex) {
     var url = this.props.host + query;
     $.ajax({
       url: url,
@@ -74,8 +73,9 @@ var Main = React.createClass({
           pages.push(value.url);
         });
         this.setState({
+          chapterId: chapterId,
           pages: pages,
-          pageIndex: 1,
+          pageIndex: pageIndex,
           lookup: 'page'
         });
       }.bind(this),

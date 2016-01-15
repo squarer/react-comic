@@ -2,7 +2,7 @@ var React = require('react');
 
 var Chapter = React.createClass({
   getUrl: function() {
-    return '/catalog/' + this.props.catalogId + '/chapter/' + this.props.chapter._id + '/page/';
+    return '/catalog/' + this.props.catalogId + '/chapter/' + this.props.chapter._id + '/page/1';
   },
   render: function() {
     var url = '#' + this.getUrl();
