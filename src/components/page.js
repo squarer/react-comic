@@ -1,5 +1,6 @@
 var React = require('react');
 var Pagination = require('./pagination');
+var Breadcrumbs = require('./breadcrumbs');
 
 var Page = React.createClass({
   componentDidMount: function() {
@@ -63,6 +64,7 @@ var Page = React.createClass({
     var url = this.props.pages[index - 1];
     return (
       <div>
+        <Breadcrumbs catalog={this.props.catalog} chapter={this.props.chapter} />
         <div className="page text-center">
           <img className="page-img" src={url} />
         </div>

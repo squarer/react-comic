@@ -11,7 +11,7 @@ var Main = React.createClass({
       catalogs: [],
       catalog: {},
       chapters: [],
-      chapterId: '',
+      chapter: {},
       pages: [],
       pageIndex: 1,
       query: '',
@@ -32,15 +32,20 @@ var Main = React.createClass({
     }
 
     // catch route to page, ex. /catalog/xxx/chapter/xxx/page/123
-    var pattern = /(^\/catalog\/\w+\/chapter\/)(\w+)\/page\/(\d+)/;
+    var pattern = /^\/catalog\/(\w+)\/chapter\/(\w+)\/page\/(\d+)/;
     if (url.search(pattern) !== -1) {
+      var catalogId = url.match(pattern)[1];
       var chapterId = url.match(pattern)[2];
       var pageIndex = url.match(pattern)[3];
-      var query = url.match(pattern)[1] + chapterId + '/page';
-      if (chapterId === this.state.chapterId) {
+      var query = '/catalog/' + catalogId + '/chapter/' + chapterId + '/page';
+      // for breadcrumbs
+      if (catalogId !== this.state.catalog._id) {
+        this.loadCatalog('/catalog/' + catalogId, 'page');
+      }
+      if (chapterId === this.state.chapter._id) {
         this.setState({lookup: 'page', pageIndex: pageIndex});
       } else {
-        this.loadPages(query, chapterId, pageIndex);
+        this.loadPages(query, chapterId, pageIndex, catalogId);
       }
       return;
     }
@@ -64,7 +69,7 @@ var Main = React.createClass({
 
     this.setState({lookup: '404'});
   },
-  loadPages: function(query, chapterId, pageIndex) {
+  loadPages: function(query, chapterId, pageIndex, catalogId) {
     var url = this.props.host + query;
     $.ajax({
       url: url,
@@ -74,8 +79,10 @@ var Main = React.createClass({
         data.forEach(function(value) {
           pages.push(value.url);
         });
+        // 20th265話_1 => 265話
+        var chapterTitle = data[0].key.replace(catalogId, '').split('_')[0];
         this.setState({
-          chapterId: chapterId,
+          chapter: {_id: chapterId, title: chapterTitle},
           pages: pages,
           pageIndex: pageIndex,
           lookup: 'page'
@@ -86,7 +93,7 @@ var Main = React.createClass({
       }.bind(this)
     });
   },
-  loadCatalog: function(query) {
+  loadCatalog: function(query, lookup = 'catalogDetail') {
     var url = this.props.host + query;
     $.ajax({
       url: url,
@@ -96,12 +103,12 @@ var Main = React.createClass({
           catalog: catalog[0],
           catalogs: [],
           chapters: [],
-          lookup: 'catalogDetail'
+          lookup: lookup
       });
       if (catalog.length === 0) {
         return;
       }
-      this.loadChapters(query);
+      lookup === 'catalogDetail' ? this.loadChapters(query) : '';
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err.toString());
@@ -180,6 +187,7 @@ var Main = React.createClass({
           catalogs={this.state.catalogs}
           catalog={this.state.catalog}
           chapters={this.state.chapters}
+          chapter={this.state.chapter}
           pages={this.state.pages}
           pageIndex={this.state.pageIndex}
           query={this.state.query}

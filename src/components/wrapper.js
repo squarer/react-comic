@@ -34,7 +34,12 @@ var Wrapper = React.createClass({
         component = <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />;
         break;
       case 'page':
-        component = <Page pages={this.props.pages} pageIndex={this.props.pageIndex} />;
+        component = <Page
+          pages={this.props.pages}
+          pageIndex={this.props.pageIndex}
+          catalog={this.props.catalog}
+          chapter={this.props.chapter}
+        />;
         break;
       case '404':
         component = <NotFound />
