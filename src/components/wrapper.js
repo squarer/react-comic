@@ -1,38 +1,52 @@
 var React = require('react');
-var SearchBar = require('./searchBar');
-var Content = require('./content');
+var Catalog = require('./catalog');
+var CatalogDetail = require('./catalogDetail');
+var Page = require('./page');
+var LoadMore = require('./loadMore');
+var NoMore = require('./noMore');
+var ReturnTop = require('./returnTop');
 var NotFound = require('./notFound');
-var Spinner = require('./spinner');
 
 var Wrapper = React.createClass({
+  componentToRender: function() {
+    var gridNodes = this.props.catalogs.map(function(catalog, index) {
+      return (
+        <Catalog catalog={catalog} key={index} />
+      );
+    });
+    var component = null;
+    switch (this.props.lookup) {
+      case 'catalog':
+        component = (
+          <div>
+            <div className="row">
+              {gridNodes}
+            </div>
+            <div className="clearfix"></div>
+            <div className="misc">
+              {this.props.more ? <LoadMore loadMore={this.handleLoadMore} /> : <NoMore />}
+            </div>
+            <ReturnTop />
+          </div>
+        );
+        break;
+      case 'catalogDetail':
+        component = <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />;
+        break;
+      case 'page':
+        component = <Page pages={this.props.pages} pageIndex={this.props.pageIndex} />;
+        break;
+      case '404':
+        component = <NotFound />
+        break;
+    }
+    return component;
+  },
   handleLoadMore: function() {
     this.props.onSearch(this.props.query, true);
   },
   render: function() {
-    return (
-      this.props.lookup === '404'
-      ? <NotFound />
-      : <div className="container">
-          <div className="row">
-            <div className="col-md-offset-3 col-md-6">
-              <SearchBar url={this.props.url} onSearch={this.props.onSearch} />
-            </div>
-          <Spinner />
-          </div>
-          <div className="row grid">
-            <Content
-              catalogs={this.props.catalogs}
-              catalog={this.props.catalog}
-              chapters={this.props.chapters}
-              pages={this.props.pages}
-              pageIndex={this.props.pageIndex}
-              lookup={this.props.lookup}
-              more={this.props.more}
-              handleLoadMore={this.handleLoadMore}
-            />
-          </div>
-        </div>
-    );
+    return this.componentToRender();
   }
 });
 

@@ -64,7 +64,10 @@ body {
 }
 
 .spinner {
+  position: absolute;
   margin: 0 auto;
+  left: 0;
+  right: 0;
   width: 100px;
   height: 40px;
   text-align: center;
@@ -73,12 +76,7 @@ body {
 }
 
 .spinner-down {
-  position: absolute;
   top: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
 }
 
 .spinner > div {

@@ -2,6 +2,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Navbar = require('./components/navbar');
 var Wrapper = require('./components/wrapper');
+var SearchBar = require('./components/searchBar');
+var Spinner = require('./components/spinner');
 
 var Main = React.createClass({
   getInitialState: function() {
@@ -29,7 +31,7 @@ var Main = React.createClass({
       return;
     }
 
-    // catch route to page, ex. /catalog/xxx/chapter/xxx/page/123/
+    // catch route to page, ex. /catalog/xxx/chapter/xxx/page/123
     var pattern = /(^\/catalog\/\w+\/chapter\/)(\w+)\/page\/(\d+)/;
     if (url.search(pattern) !== -1) {
       var chapterId = url.match(pattern)[2];
@@ -166,10 +168,14 @@ var Main = React.createClass({
   render: function() {
     var host = this.props.host;
     return (
-      <div>
+      <div className="container">
         <Navbar url={host + '/category'} />
+        <div className="row">
+          <div className="col-md-offset-3 col-md-6">
+            <SearchBar url={host + '/catalog'} />
+          </div>
+        </div>
         <Wrapper
-          url={host + '/catalog'}
           onSearch={this.handleSearch}
           catalogs={this.state.catalogs}
           catalog={this.state.catalog}
@@ -180,6 +186,7 @@ var Main = React.createClass({
           more={this.state.more}
           lookup={this.state.lookup}
         />
+        <Spinner />
         <div className="footer"></div>
       </div>
     );

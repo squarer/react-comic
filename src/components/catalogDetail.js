@@ -13,23 +13,27 @@ var CatalogDetail = React.createClass({
       );
     }.bind(this));
     return (
-      <div>
-        <div className="detail">
-          <div className="col-md-offset-3 col-md-3 crop">
-            <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
-          </div>
-          <div className="col-md-3">
-            <p>category: {this.props.catalog.category}</p>
-            <p>title: {this.props.catalog.title}</p>
-            <p>author: {this.props.catalog.author}</p>
-            <p>updatedAt: {this.toISOFormat(this.props.catalog.updatedAt)}</p>
-          </div>
-          <div className="col-md-3"></div>
+      this.props.catalog === undefined
+      ? <div className="alert alert-danger text-center" role="alert">
+          No results Found
         </div>
-        <div className="col-md-12 chapter">
-          {chapterNodes}
+      : <div>
+          <div className="detail">
+            <div className="col-md-offset-3 col-md-3 crop">
+              <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+            </div>
+            <div className="col-md-3">
+              <p>category: {this.props.catalog.category}</p>
+              <p>title: {this.props.catalog.title}</p>
+              <p>author: {this.props.catalog.author}</p>
+              <p>updatedAt: {this.toISOFormat(this.props.catalog.updatedAt)}</p>
+            </div>
+            <div className="col-md-3"></div>
+          </div>
+          <div className="col-md-12 chapter">
+            {chapterNodes}
+          </div>
         </div>
-      </div>
     );
   }
 });
