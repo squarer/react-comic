@@ -143,7 +143,7 @@ var Main = React.createClass({
       url += '&skip=' + this.state.skip;
       $(loadMoreButton).button('loading');
     } else {
-      $('.grid').addClass('blur');
+      $('.catalog-nodes').addClass('blur');
     }
     url += '&limit=' + parseInt(limit + 1);
     $.ajax({
@@ -164,7 +164,7 @@ var Main = React.createClass({
           skip: loadMore ? this.state.skip + limit : limit,
           more: more
         });
-        $('.grid').removeClass('blur');
+        $('.catalog-nodes').removeClass('blur');
         $(spinner).fadeOut();
       }.bind(this),
       error: function(xhr, status, err) {
