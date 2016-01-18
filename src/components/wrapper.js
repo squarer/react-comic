@@ -9,19 +9,12 @@ var NotFound = require('./notFound');
 
 var Wrapper = React.createClass({
   componentToRender: function() {
-    var catalogNodes = this.props.catalogs.map(function(catalog, index) {
-      return (
-        <Catalog catalog={catalog} key={index} />
-      );
-    });
     var component = null;
     switch (this.props.lookup) {
       case 'catalog':
         component = (
           <div>
-            <div className="row catalog-nodes">
-              {catalogNodes}
-            </div>
+            <Catalog catalogs={this.props.catalogs} />
             <div className="clearfix"></div>
             <div className="misc">
               {this.props.more ? <LoadMore loadMore={this.handleLoadMore} /> : <NoMore />}

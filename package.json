@@ -23,9 +23,11 @@
   "dependencies": {
     "express": "^4.13.3",
     "jade": "^1.11.0",
+    "material-ui": "^0.14.2",
     "moment": "^2.11.1",
     "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react-dom": "^0.14.6",
+    "react-tap-event-plugin": "^0.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.4.0",
