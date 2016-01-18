@@ -24,10 +24,6 @@ body {
   filter: blur(3px);
 }
 
-.row {
-  height: 70px;
-}
-
 .twitter-typeahead {
   float:left;
   width:100%
