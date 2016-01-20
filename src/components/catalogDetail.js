@@ -19,14 +19,18 @@ var CatalogDetail = React.createClass({
         </div>
       : <div>
           <div className="detail">
-            <div className="col-md-offset-3 col-md-3 crop">
-              <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+            <div className="col-md-offset-3 col-md-3">
+              <div className="crop">
+                <img className="img-responsive " src={this.props.catalog.thumbnailurl} />
+              </div>
             </div>
             <div className="col-md-3">
-              <p>category: {this.props.catalog.category}</p>
-              <p>title: {this.props.catalog.title}</p>
-              <p>author: {this.props.catalog.author}</p>
-              <p>updatedAt: {this.toISOFormat(this.props.catalog.updatedAt)}</p>
+              <div className="well">
+                <p>category: {this.props.catalog.category}</p>
+                <p>title: {this.props.catalog.title}</p>
+                <p>author: {this.props.catalog.author}</p>
+                <p>updatedAt: {this.toISOFormat(this.props.catalog.updatedAt)}</p>
+              </div>
             </div>
             <div className="col-md-3"></div>
           </div>

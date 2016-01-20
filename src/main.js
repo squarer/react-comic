@@ -17,7 +17,7 @@ var Main = React.createClass({
       query: '',
       skip: limit,
       more: true,
-      lookup: 'catalog'
+      lookup: ''
     };
   },
   componentDidMount: function() {

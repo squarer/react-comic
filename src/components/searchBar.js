@@ -57,7 +57,6 @@ var SearchBar = React.createClass({
           placeholder="search comic..."
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
-          ref="titleInput"
         />
         <span className="input-group-btn">
           <button className="btn btn-info btn-lg" type="button" onClick={this.handleClick}>

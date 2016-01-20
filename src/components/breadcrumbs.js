@@ -6,11 +6,11 @@ var Breadcrumbs = React.createClass({
   },
   render: function() {
     return (
-      <ol className="breadcrumb">
+      <ul className="breadcrumb">
         <li><a href="/">Home</a></li>
         <li><a href={this.getUrl()}>{this.props.catalog.title}</a></li>
         <li>{this.props.chapter.title}</li>
-      </ol>
+      </ul>
     );
   }
 });

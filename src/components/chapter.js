@@ -7,7 +7,7 @@ var Chapter = React.createClass({
   render: function() {
     return (
       <div className="col-md-1 col-sm-2 col-xs-3">
-        <a href={this.getUrl()}>
+        <a className="btn btn-default btn-raised btn-xs" href={this.getUrl()}>
           {this.props.chapter.title}
         </a>
       </div>
