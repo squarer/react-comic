@@ -47,19 +47,27 @@ var SearchBar = React.createClass({
     $('.typeahead').bind('typeahead:select', function(event, suggestion) {
       this.handleChange(event);
     }.bind(this));
+
+    $.material.init();
   },
   render: function() {
     return (
-      <div className="input-group col-md-12">
+      <div className="input-group">
         <input
           type="text"
           className="form-control input-lg typeahead"
           placeholder="search comic..."
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
+          style={{marginLeft: 10}}
         />
         <span className="input-group-btn">
-          <button className="btn btn-info btn-lg" type="button" onClick={this.handleClick}>
+          <button
+            className="btn btn-info btn-raised"
+            type="button"
+            onClick={this.handleClick}
+            style={{marginBottom: -15}}
+          >
             <i className="glyphicon glyphicon-search"></i>
           </button>
         </span>

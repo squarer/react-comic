@@ -21,7 +21,7 @@ var ReturnTop = React.createClass({
   },
   render: function() {
     return (
-      <button type="button" className="btn btn-default return-top" onClick={this.returntop}>
+      <button type="button" className="btn btn-warning btn-sm btn-raised return-top" onClick={this.returntop}>
         <span className="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
       </button>
     );

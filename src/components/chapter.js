@@ -1,6 +1,9 @@
 var React = require('react');
 
 var Chapter = React.createClass({
+  componentDidMount: function() {
+    $.material.init();
+  },
   getUrl: function() {
     return '#/catalog/' + this.props.catalogId + '/chapter/' + this.props.chapter._id + '/page/1';
   },

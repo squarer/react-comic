@@ -177,7 +177,7 @@ var Main = React.createClass({
     return (
       <div className="container">
         <Navbar url={host + '/category'} />
-        <div className="row" style={{marginBottom: 50}}>
+        <div className="row searchbar" style={{marginBottom: 20}}>
           <div className="col-md-offset-3 col-md-6">
             <SearchBar url={host + '/catalog'} />
           </div>
