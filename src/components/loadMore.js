@@ -7,6 +7,9 @@ var LoadMore = React.createClass({
       if (loadmore.length <= 0) {
         return;
       }
+      if ($.active > 0) {
+        return;
+      }
       if(loadmore.position().top < $(window).scrollTop() + $(window).height()) {
         loadmore.click();
       }
