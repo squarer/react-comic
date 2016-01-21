@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 var Navbar = require('./components/navbar');
 var Wrapper = require('./components/wrapper');
 var SearchBar = require('./components/searchBar');
+var ToggleButton = require('./components/toggleButton');
 var Spinner = require('./components/spinner');
 
 var Main = React.createClass({
@@ -178,8 +179,11 @@ var Main = React.createClass({
       <div className="container">
         <Navbar url={host + '/category'} />
         <div className="row searchbar" style={{marginBottom: 20}}>
-          <div className="col-md-offset-3 col-md-6">
+          <div className="col-md-offset-3 col-md-6 col-sm-9">
             <SearchBar url={host + '/catalog'} />
+          </div>
+          <div className={this.state.lookup === 'catalog' ? 'col-md-3 col-sm-3' : 'hidden'}>
+            <ToggleButton />
           </div>
         </div>
         <Wrapper

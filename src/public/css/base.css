@@ -143,3 +143,10 @@ body {
 .pagination > li > a {
   min-width: 50px;
 }
+
+@media (min-width: 768px) {
+  .togglebutton {
+    float: right;
+  }
+}
+
