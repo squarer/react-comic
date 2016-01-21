@@ -15,7 +15,16 @@ var Catalog = React.createClass({
           <div className="crop">
             <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
           </div>
-          <p style={{marginTop: 10, marginBottom: 0}}>{this.props.catalog.title}</p>
+          <p style={{
+              marginTop: 10,
+              marginBottom: 0,
+              marginLeft: 6,
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              width: 120
+          }}>
+            {this.props.catalog.title}
+          </p>
         </a>
       </div>
     );
