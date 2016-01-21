@@ -34,6 +34,7 @@ var ToggleButton = React.createClass({
   appendHash: function(hash) {
     var href = window.location.href;
     if (!window.location.hash) {
+      href = href.replace('#', '');
       href += '#/catalog?';
     }
     href = href.replace(/(\&sort=\w+)/, '');
