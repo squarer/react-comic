@@ -1,11 +1,18 @@
 var React = require('react');
 
 var Category = React.createClass({
+  getUrl: function() {
+    var url = '#/catalog?category=' + this.props.category;
+    if (!this.props.sort) {
+      return url;
+    }
+    return url + '&sort=' + this.props.sort;
+  },
   render: function() {
     var category = this.props.category.slice(0, -1);
     return (
       <li>
-        <a href={'#/catalog?category=' + this.props.category}>{category}</a>
+        <a href={this.getUrl()}>{category}</a>
       </li>
     );
   }
@@ -33,9 +40,9 @@ var Navbar = React.createClass({
   render: function() {
     var categoryNodes = this.state.categories.map(function(category, index) {
       return (
-        <Category category={category} key={index} />
+        <Category category={category} sort={this.props.sort} key={index} />
       );
-    });
+    }.bind(this));
     return (
       <div className="navbar navbar-default" role="navigation">
         <div className="container">

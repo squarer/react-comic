@@ -1,18 +1,12 @@
 var React = require('react');
 
-var ToggleButton = React.createClass({
-  init: function() {
-    var hash = window.location.hash;
-    $('.togglebutton').find('input:checkbox').prop('checked', false);
-    if (hash.indexOf('sort=update') > -1) {
-      $('#newest').prop('checked', true);
-    } else if (hash.indexOf('sort=hot') > -1) {
-      $('#hottest').prop('checked', true);
-    }
-  },
+var Switch = React.createClass({
   handleChange: function() {
     var that = this;
     $('.togglebutton').on('change', function() {
+      if ($.active > 0) {
+        return false;
+      }
       var toggled = $(this);
       var checkbox = toggled.find('input:checkbox');
       var another = toggled.parent().siblings().eq(0).find('input:checkbox');
@@ -27,8 +21,6 @@ var ToggleButton = React.createClass({
     });
   },
   componentDidMount: function() {
-    window.addEventListener('hashchange', this.init, false);
-    this.init();
     this.handleChange();
   },
   appendHash: function(hash) {
@@ -53,7 +45,7 @@ var ToggleButton = React.createClass({
         <div className="col-sm-12 col-xs-6">
           <div data-order="hot" className="togglebutton" style={{marginTop: 10}}>
             <label>
-              <input id="hottest" type="checkbox"/>hottest
+              <input id="hottest" type="checkbox" />hottest
             </label>
           </div>
         </div>
@@ -62,4 +54,4 @@ var ToggleButton = React.createClass({
   }
 });
 
-module.exports = ToggleButton;
+module.exports = Switch;

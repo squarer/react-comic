@@ -150,3 +150,11 @@ body {
   }
 }
 
+
+.togglebutton label input[type=checkbox][disabled]+.toggle:after {
+  background-color: #f1f1f1;
+}
+
+.togglebutton label input[type=checkbox][disabled]:checked+.toggle:after {
+  background-color: #009688;
+}

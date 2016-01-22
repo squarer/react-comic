@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 var Navbar = require('./components/navbar');
 var Wrapper = require('./components/wrapper');
 var SearchBar = require('./components/searchBar');
-var ToggleButton = require('./components/toggleButton');
+var Switch = require('./components/switch');
 var Spinner = require('./components/spinner');
 
 var Main = React.createClass({
@@ -18,7 +18,8 @@ var Main = React.createClass({
       query: '',
       skip: limit,
       more: true,
-      lookup: ''
+      lookup: '',
+      sort: false
     };
   },
   componentDidMount: function() {
@@ -64,11 +65,25 @@ var Main = React.createClass({
     var pattern = /^\/catalog\?(.*)/;
     if (url.search(pattern) !== -1) {
       var query = url.match(pattern)[1];
+      this.handleSwitch(query);
       this.handleSearch(query);
       return;
     }
 
     this.setState({lookup: '404'});
+  },
+  handleSwitch: function(query) {
+    var pattern = /sort=(\w+)/;
+    if (query.search(pattern) !== -1) {
+      var order = query.match(pattern)[1];
+      this.setState({sort: order});
+      $('#newest').prop('checked', order === 'update');
+      $('#hottest').prop('checked', order === 'hot');
+    } else {
+      this.setState({sort: false});
+      $('#newest').prop('checked', false);
+      $('#hottest').prop('checked', false);
+    }
   },
   loadPages: function(query, chapterId, pageIndex, catalogId) {
     var url = this.props.host + query;
@@ -136,8 +151,10 @@ var Main = React.createClass({
   handleSearch: function(query, loadMore = false) {
     var spinner = document.querySelector('.spinner');
     var loadMoreButton = document.querySelector('#loadMore');
+    var checkbox = $('input:checkbox');
     $(spinner).removeClass('spinner-down');
     $(spinner).show();
+    checkbox.prop('disabled', true);
 
     var url = this.props.host + '/catalog?' + query;
     if (loadMore) {
@@ -167,6 +184,7 @@ var Main = React.createClass({
         });
         $('.catalog-nodes').removeClass('blur');
         $(spinner).fadeOut();
+        checkbox.removeAttr('disabled');
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err.toString());
@@ -177,13 +195,13 @@ var Main = React.createClass({
     var host = this.props.host;
     return (
       <div className="container">
-        <Navbar url={host + '/category'} />
+        <Navbar url={host + '/category'} sort={this.state.sort} />
         <div className="row searchbar" style={{marginBottom: 20}}>
           <div className="col-md-offset-3 col-md-6 col-sm-9">
             <SearchBar url={host + '/catalog'} />
           </div>
           <div className={this.state.lookup === 'catalog' ? 'col-md-3 col-sm-3' : 'hidden'}>
-            <ToggleButton />
+            <Switch />
           </div>
         </div>
         <Wrapper
