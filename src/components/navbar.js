@@ -19,6 +19,13 @@ var Category = React.createClass({
 });
 
 var Navbar = React.createClass({
+  getUrl: function() {
+    var href = window.location.href;
+    if (!this.props.sort) {
+      return '/#/';
+    }
+    return '#/catalog?&sort=' + this.props.sort;
+  },
   loadCategories: function() {
     $.ajax({
       url: this.props.url,
@@ -53,7 +60,7 @@ var Navbar = React.createClass({
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" href="/">305</a>
+            <a className="navbar-brand" href={this.getUrl()}>305</a>
           </div>
           <div className="collapse navbar-collapse navbar-305-collapse">
             <ul className="nav navbar-nav">

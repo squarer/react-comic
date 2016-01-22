@@ -27,8 +27,20 @@ var Main = React.createClass({
     this.navigate();
   },
   navigate: function() {
+    var hash = window.location.hash;
+    // redirect invalid hash to root url, ex. /##balabala => /#/
+    // where '/#/' presents '/' for hash routing
+    if (!hash || hash.search(/^##+/) !== -1) {
+      window.location.href = window.location.href.replace(/\/#+.*/, '') + '#/';
+    }
+
+    // add '/' at hash beginning, ex. /#foo => /#/foo
+    if (hash.search(/^#\w+.*/) !== -1) {
+      window.location.href = window.location.href.replace(/#(\w+.*)/, '#/$1');
+    }
+
     var url = window.location.hash.substring(1);
-    if (!url) {
+    if (url === '/') {
       this.handleSearch();
       return;
     }
@@ -148,7 +160,7 @@ var Main = React.createClass({
       }.bind(this)
     });
   },
-  handleSearch: function(query, loadMore = false) {
+  handleSearch: function(query = '', loadMore = false) {
     var spinner = document.querySelector('.spinner');
     var loadMoreButton = document.querySelector('#loadMore');
     var checkbox = $('input:checkbox');

@@ -25,9 +25,9 @@ var Switch = React.createClass({
   },
   appendHash: function(hash) {
     var href = window.location.href;
-    if (!window.location.hash) {
-      href = href.replace('#', '');
-      href += '#/catalog?';
+    var url = window.location.hash.substring(1);
+    if (url === '/') {
+      href = href.replace('#/', '#/catalog?');
     }
     href = href.replace(/(\&sort=\w+)/, '');
     window.location.href = href + hash;
