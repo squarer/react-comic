@@ -11,15 +11,22 @@ var Pages = React.createClass({
       }
   },
   componentDidMount: function() {
-    window.addEventListener('scroll', function() {
-      var pagination = $(".pagination");
-      if ($.active > 0) {
-        return;
-      }
-      if(pagination.position().top < $(window).scrollTop() + $(window).height()) {
-        this.loadNextPage();
-      }
-    }.bind(this), false);
+    window.addEventListener('scroll', this.handleScroll, false);
+  },
+  componentWillUnmount: function() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  handleScroll: function() {
+    var pagination = $(".pagination");
+    if (pagination.length <= 0) {
+      return;
+    }
+    if ($.active > 0) {
+      return;
+    }
+    if(pagination.position().top < $(window).scrollTop() + $(window).height()) {
+      this.loadNextPage();
+    }
   },
   loadNextPage: function() {
     if (this.props.pages.length <= this.state.loadPageCount)
@@ -63,19 +70,20 @@ var Pages = React.createClass({
   },
   render: function() {
     var index = this.getCurrentIndex();
-    
+
     var loadPage = [];
     for (var i = 0; i < this.state.loadPageCount; i++) {
       var url = this.props.pages[i];
       loadPage.push(url);
     }
+    var pageNodes = loadPage.map(function(result, index) {
+      return <Page url={result} key={index} />
+    });
     return (
       <div>
         <Breadcrumbs catalog={this.props.catalog} chapter={this.props.chapter} />
         <div className="page text-center">
-          { loadPage.map(function (result) {
-              return <Page url={result} />;
-          })}
+          {pageNodes}
         </div>
         <div className="text-center">
           <Pagination pages={this.props.pages} currentIndex={index} getUrl={this.getUrl} />
