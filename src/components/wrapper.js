@@ -1,7 +1,7 @@
 var React = require('react');
 var Catalog = require('./catalog');
 var CatalogDetail = require('./catalogDetail');
-var Page = require('./page');
+var Pages = require('./pages');
 var LoadMore = require('./loadMore');
 var NoMore = require('./noMore');
 var ReturnTop = require('./returnTop');
@@ -34,7 +34,7 @@ var Wrapper = React.createClass({
         component = <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />;
         break;
       case 'page':
-        component = <Page
+        component = <Pages
           pages={this.props.pages}
           pageIndex={this.props.pageIndex}
           catalog={this.props.catalog}
