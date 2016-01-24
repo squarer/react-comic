@@ -30,7 +30,14 @@ var Navbar = React.createClass({
     $.ajax({
       url: this.props.url,
       dataType: 'json',
-      success: function(categories) {
+      success: function(data) {
+        var categories = [];
+        for (let value of data) {
+          if (!value) {
+            continue;
+          }
+          categories.push(value);
+        }
         this.setState({categories: categories});
       }.bind(this),
       error: function(xhr, status, err) {

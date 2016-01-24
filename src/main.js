@@ -13,6 +13,8 @@ var Main = React.createClass({
       catalog: {},
       chapters: [],
       chapter: {},
+      nextChapter: null,
+      prevChapter: null,
       pages: [],
       pageIndex: 1,
       query: '',
@@ -51,15 +53,16 @@ var Main = React.createClass({
       var catalogId = url.match(pattern)[1];
       var chapterId = url.match(pattern)[2];
       var pageIndex = url.match(pattern)[3];
-      var query = '/catalog/' + catalogId + '/chapter/' + chapterId + '/page';
+      var query = '/catalog/' + catalogId + '/chapter/' + chapterId;
       // for breadcrumbs
       if (catalogId !== this.state.catalog._id) {
         this.loadCatalog('/catalog/' + catalogId, 'page');
       }
+
       if (chapterId === this.state.chapter._id) {
         this.setState({lookup: 'page', pageIndex: pageIndex});
       } else {
-        this.loadPages(query, chapterId, pageIndex, catalogId);
+        this.loadChapter(query, chapterId, pageIndex);
       }
       return;
     }
@@ -97,7 +100,26 @@ var Main = React.createClass({
       $('#hottest').prop('checked', false);
     }
   },
-  loadPages: function(query, chapterId, pageIndex, catalogId) {
+  loadChapter: function(query, chapterId, pageIndex) {
+    var url = this.props.host + query;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      success: function(data) {
+        this.setState({
+          chapter: {_id: data._id, title: data.title},
+          nextChapter: data.next ? {_id: data.next._id, title: data.next.title} : null,
+          prevChapter: data.prev ? {_id: data.prev._id, title: data.prev.title} : null,
+          pages: []
+        });
+        this.loadPages(query + '/page', chapterId, pageIndex);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  loadPages: function(query, chapterId, pageIndex) {
     var url = this.props.host + query;
     $.ajax({
       url: url,
@@ -107,10 +129,7 @@ var Main = React.createClass({
         data.forEach(function(value) {
           pages.push(value.url);
         });
-        // 20th265話_1 => 265話
-        var chapterTitle = data[0].key.replace(catalogId, '').split('_')[0];
         this.setState({
-          chapter: {_id: chapterId, title: chapterTitle},
           pages: pages,
           pageIndex: pageIndex,
           lookup: 'page'
@@ -222,6 +241,8 @@ var Main = React.createClass({
           catalog={this.state.catalog}
           chapters={this.state.chapters}
           chapter={this.state.chapter}
+          nextChapter={this.state.nextChapter}
+          prevChapter={this.state.prevChapter}
           pages={this.state.pages}
           pageIndex={this.state.pageIndex}
           query={this.state.query}

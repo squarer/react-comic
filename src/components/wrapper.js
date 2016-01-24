@@ -39,6 +39,8 @@ var Wrapper = React.createClass({
           pageIndex={this.props.pageIndex}
           catalog={this.props.catalog}
           chapter={this.props.chapter}
+          nextChapter={this.props.nextChapter}
+          prevChapter={this.props.prevChapter}
         />;
         break;
       case '404':

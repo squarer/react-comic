@@ -2,6 +2,7 @@ var React = require('react');
 var Breadcrumbs = require('./breadcrumbs');
 var Page = require('./page');
 var ReturnTop = require('./returnTop');
+var NextChapter = require('./nextChapter');
 
 var Pages = React.createClass({
   getInitialState: function () {
@@ -16,15 +17,18 @@ var Pages = React.createClass({
     window.removeEventListener('scroll', this.handleScroll);
   },
   handleScroll: function() {
-    var endFlag = $(".end-flag");
-    if (endFlag.length <= 0) {
+    var nextChapter = $("#next-chapter");
+    if (nextChapter.length <= 0) {
       return;
     }
     if ($.active > 0) {
       return;
     }
-    if(endFlag.position().top < $(window).scrollTop() + $(window).height()) {
+    if (nextChapter.position().top < $(window).scrollTop() + $(window).height()) {
       this.loadNextPage();
+    }
+    if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+      nextChapter.removeClass('hidden');
     }
   },
   loadNextPage: function() {
@@ -43,14 +47,17 @@ var Pages = React.createClass({
     });
     return (
       <div>
-        <Breadcrumbs catalog={this.props.catalog} chapter={this.props.chapter} />
+        <Breadcrumbs
+          catalog={this.props.catalog}
+          chapter={this.props.chapter}
+          nextChapter={this.props.nextChapter}
+          prevChapter={this.props.prevChapter}
+        />
         <div className="page text-center">
           {pageNodes}
         </div>
         <div className="text-center">
-          <div className="alert alert-info end-flag" role="alert">
-            bottom of content
-          </div>
+          <NextChapter catalog={this.props.catalog} nextChapter={this.props.nextChapter} />
         </div>
         <ReturnTop />
       </div>
