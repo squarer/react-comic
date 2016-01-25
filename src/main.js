@@ -82,7 +82,6 @@ var Main = React.createClass({
     var pattern = /^\/catalog\?(.*)/;
     if (url.search(pattern) !== -1) {
       var query = url.match(pattern)[1];
-      this.handleSwitch(query);
       this.handleSearch(query);
       return;
     }
@@ -220,6 +219,7 @@ var Main = React.createClass({
           skip: loadMore ? this.state.skip + limit : limit,
           more: more
         });
+        this.handleSwitch(query);
         $('.catalog-nodes').removeClass('blur');
         $(spinner).fadeOut();
         checkbox.removeAttr('disabled');
