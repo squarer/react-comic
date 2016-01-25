@@ -1,4 +1,7 @@
 # react-comic
+
+[![Build Status](https://travis-ci.org/squarer/react-comic.svg?branch=master)](https://travis-ci.org/squarer/react-comic)
+
 A comic app front end built with [React](https://facebook.github.io/react/).
 
 ### Install Dependencies & Build
