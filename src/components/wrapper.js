@@ -1,12 +1,12 @@
 var React = require('react');
-var Catalog = require('./catalog');
-var CatalogDetail = require('./catalogDetail');
-var ScrollView = require('./scrollView');
-var PagingView = require('./pagingView');
-var LoadMore = require('./loadMore');
-var NoMore = require('./noMore');
-var ReturnTop = require('./returnTop');
-var NotFound = require('./notFound');
+var Catalog = require('./catalog/catalog');
+var LoadMore = require('./catalog/loadMore');
+var NoMore = require('./catalog/noMore');
+var CatalogDetail = require('./catalogDetail/catalogDetail');
+var ScrollView = require('./page/scrollView');
+var PagingView = require('./page/pagingView');
+var ReturnTop = require('./common/returnTop');
+var NotFound = require('./common/notFound');
 
 var Wrapper = React.createClass({
   componentToRender: function() {

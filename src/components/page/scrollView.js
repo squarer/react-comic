@@ -1,7 +1,7 @@
 var React = require('react');
 var Breadcrumbs = require('./breadcrumbs');
 var Page = require('./page');
-var ReturnTop = require('./returnTop');
+var ReturnTop = require('../common/returnTop');
 var NextChapter = require('./nextChapter');
 
 var Pages = React.createClass({

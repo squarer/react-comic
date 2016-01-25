@@ -3,9 +3,9 @@ var ReactDOM = require('react-dom');
 var Navbar = require('./components/navbar');
 var Wrapper = require('./components/wrapper');
 var SearchBar = require('./components/searchBar');
-var Switch = require('./components/switch');
-var ViewSwitch = require('./components/viewSwitch');
-var Spinner = require('./components/spinner');
+var Switch = require('./components/switch/switch');
+var ViewSwitch = require('./components/switch/viewSwitch');
+var Spinner = require('./components/common/spinner');
 
 var Main = React.createClass({
   getInitialState: function() {

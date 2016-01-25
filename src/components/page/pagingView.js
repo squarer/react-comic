@@ -1,7 +1,7 @@
 var React = require('react');
 var Breadcrumbs = require('./breadcrumbs');
 var Page = require('./page');
-var Pagination = require('./pagination');
+var Pagination = require('../pagination/pagination');
 
 var PagingView = React.createClass({
   componentDidMount: function() {
