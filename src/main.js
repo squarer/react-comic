@@ -4,6 +4,7 @@ var Navbar = require('./components/navbar');
 var Wrapper = require('./components/wrapper');
 var SearchBar = require('./components/searchBar');
 var Switch = require('./components/switch');
+var ViewSwitch = require('./components/viewSwitch');
 var Spinner = require('./components/spinner');
 
 var Main = React.createClass({
@@ -21,7 +22,8 @@ var Main = React.createClass({
       skip: limit,
       more: true,
       lookup: '',
-      sort: false
+      sort: false,
+      viewMode: 'scroll'
     };
   },
   componentDidMount: function() {
@@ -86,6 +88,10 @@ var Main = React.createClass({
     }
 
     this.setState({lookup: '404'});
+  },
+  handleViewSwitch: function() {
+    var viewMode = localStorage.getItem('viewMode') ? localStorage.getItem('viewMode') : this.state.viewMode
+    $('#viewSwitch').prop('checked', viewMode === 'paging');
   },
   handleSwitch: function(query) {
     var pattern = /sort=(\w+)/;
@@ -155,6 +161,7 @@ var Main = React.createClass({
       if (catalog.length === 0) {
         return;
       }
+      this.handleViewSwitch();
       lookup === 'catalogDetail' ? this.loadChapters(query) : '';
       }.bind(this),
       error: function(xhr, status, err) {
@@ -222,6 +229,22 @@ var Main = React.createClass({
       }.bind(this)
     });
   },
+  getSwitch: function() {
+    var component = null;
+    switch (this.state.lookup) {
+      case 'catalog':
+        component = <Switch />;
+        break;
+      case 'catalogDetail':
+        component = <ViewSwitch onChange={this.handleViewMode} />;
+        break;
+    }
+    return component;
+  },
+  handleViewMode: function(viewMode) {
+    this.setState({viewMode: viewMode});
+    localStorage.setItem('viewMode', viewMode);
+  },
   render: function() {
     var host = this.props.host;
     return (
@@ -231,8 +254,8 @@ var Main = React.createClass({
           <div className="col-md-offset-3 col-md-6 col-sm-9">
             <SearchBar url={host + '/catalog'} />
           </div>
-          <div className={this.state.lookup === 'catalog' ? 'col-md-3 col-sm-3' : 'hidden'}>
-            <Switch />
+          <div className="col-md-3 col-sm-3">
+            {this.getSwitch()}
           </div>
         </div>
         <Wrapper
@@ -248,6 +271,7 @@ var Main = React.createClass({
           query={this.state.query}
           more={this.state.more}
           lookup={this.state.lookup}
+          viewMode={this.state.viewMode}
         />
         <Spinner />
         <div className="footer"></div>

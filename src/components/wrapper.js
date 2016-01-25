@@ -1,7 +1,8 @@
 var React = require('react');
 var Catalog = require('./catalog');
 var CatalogDetail = require('./catalogDetail');
-var Pages = require('./pages');
+var ScrollView = require('./scrollView');
+var PagingView = require('./pagingView');
 var LoadMore = require('./loadMore');
 var NoMore = require('./noMore');
 var ReturnTop = require('./returnTop');
@@ -34,14 +35,26 @@ var Wrapper = React.createClass({
         component = <CatalogDetail catalog={this.props.catalog} chapters={this.props.chapters} />;
         break;
       case 'page':
-        component = <Pages
-          pages={this.props.pages}
-          pageIndex={this.props.pageIndex}
-          catalog={this.props.catalog}
-          chapter={this.props.chapter}
-          nextChapter={this.props.nextChapter}
-          prevChapter={this.props.prevChapter}
-        />;
+        var viewMode = localStorage.getItem('viewMode') ? localStorage.getItem('viewMode') : this.props.viewMode
+        component = viewMode === 'scroll'
+        ? <ScrollView
+            pages={this.props.pages}
+            pageIndex={this.props.pageIndex}
+            catalog={this.props.catalog}
+            chapter={this.props.chapter}
+            nextChapter={this.props.nextChapter}
+            prevChapter={this.props.prevChapter}
+            viewMode={this.props.viewMode}
+          />
+        : <PagingView
+            pages={this.props.pages}
+            pageIndex={this.props.pageIndex}
+            catalog={this.props.catalog}
+            chapter={this.props.chapter}
+            nextChapter={this.props.nextChapter}
+            prevChapter={this.props.prevChapter}
+            viewMode={this.props.viewMode}
+         />;
         break;
       case '404':
         component = <NotFound />

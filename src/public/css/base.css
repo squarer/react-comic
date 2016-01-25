@@ -150,7 +150,6 @@ body {
   }
 }
 
-
 .togglebutton label input[type=checkbox][disabled]+.toggle:after {
   background-color: #f1f1f1;
 }
