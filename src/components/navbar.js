@@ -49,6 +49,11 @@ var Navbar = React.createClass({
     return {categories: []};
   },
   componentDidMount: function() {
+    $(document).on('click','.navbar-collapse.in',function(e) {
+      if ($(e.target).is('a')) {
+        $(this).collapse('hide');
+      }
+    });
     this.loadCategories();
   },
   render: function() {
