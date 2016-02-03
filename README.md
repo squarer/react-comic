@@ -14,7 +14,8 @@ $ npm run build
 
 ### Running the App
 ``` bash
-$ API_HOST="http://my_api_host:port" nodemon index.js
+$ cp .env.example .env
+$ nodemon index.js
 ```
 
 ### [Demo](http://54.148.203.21:3000/)

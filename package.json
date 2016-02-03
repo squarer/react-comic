@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/squarer/react-comic#readme",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "express": "^4.13.3",
     "jade": "^1.11.0",
     "moment": "^2.11.1",

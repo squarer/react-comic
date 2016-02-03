@@ -1,3 +1,4 @@
 node_modules
 *.json
 bundle.js
+.env

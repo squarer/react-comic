@@ -1,7 +1,9 @@
 var path = require('path');
 var express = require('express');
 var app = express();
+var dotenv = require('dotenv');
 
+dotenv.load({path: '.env'});
 app.set('port', (process.env.PORT || 3000));
 app.set('host', (process.env.API_HOST || ''));
 app.use('/src', express.static(__dirname + '/src'));
