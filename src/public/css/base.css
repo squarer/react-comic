@@ -163,3 +163,31 @@ body {
   margin: 0 auto;
   width: 100%;
 }
+
+/* masonry layout */
+.grid-item {
+  float: left;
+  margin-bottom: 30px;
+  height: 200px;
+}
+
+.grid-item-h1 {
+  height: 270px;
+}
+
+.grid-item-h2 {
+  height: 300px;
+}
+
+.grid-item-h1 a div img {
+  height: 150px;
+}
+
+.grid-item-h2 a div img {
+  height: 180px;
+}
+
+.grid-item a {
+  display: inline-block;
+  max-width: 162px;
+}

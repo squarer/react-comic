@@ -12,15 +12,17 @@ var Wrapper = React.createClass({
   componentToRender: function() {
     var catalogNodes = this.props.catalogs.map(function(catalog, index) {
       return (
-        <Catalog catalog={catalog} key={index} />
+        <Catalog catalog={catalog} key={index} index={index} />
       );
     });
     var component = null;
     switch (this.props.lookup) {
       case 'catalog':
+        $('.grid').masonry();
         component = (
           <div>
-            <div className="row catalog-nodes">
+            <div className="row catalog-nodes grid">
+              <div className="grid-sizer col-lg-2 col-md-3 col-sm-4 col-xs-6"></div>
               {catalogNodes}
             </div>
             <div className="clearfix"></div>
