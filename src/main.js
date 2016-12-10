@@ -6,6 +6,7 @@ var SearchBar = require('./components/searchBar');
 var Switch = require('./components/switch/switch');
 var ViewSwitch = require('./components/switch/viewSwitch');
 var Spinner = require('./components/common/spinner');
+var config = require('../config.js');
 
 var Main = React.createClass({
   getInitialState: function() {
@@ -280,7 +281,7 @@ var Main = React.createClass({
   }
 });
 
-var host = document.querySelector('#container').dataset.host;
+var host = config.host;
 var limit = 30;
 
 ReactDOM.render(
