@@ -18,4 +18,4 @@ $ cp .env.example .env
 $ nodemon index.js
 ```
 
-### [Demo](http://54.148.203.21:3000/)
+### [Demo](http://52.39.102.96:3000/)
