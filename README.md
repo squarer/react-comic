@@ -14,7 +14,7 @@ $ npm run build
 
 ### Running the App
 ``` bash
-$ cp .env.example .env
+$ cp config.js.example config.js
 $ nodemon index.js
 ```
 
