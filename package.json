@@ -4,7 +4,7 @@
   "description": "A comic app front end built with react",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --progress --colors --watch & cp -r ./src/dist/ ./docs",
+    "build": "webpack --progress --colors --watch & cp -r ./src/dist/* ./docs",
     "test": "mocha --timeout 5000 --check-leaks test --recursive"
   },
   "repository": {
