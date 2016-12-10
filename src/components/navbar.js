@@ -22,7 +22,7 @@ var Navbar = React.createClass({
   getUrl: function() {
     var href = window.location.href;
     if (!this.props.sort) {
-      return '/#/';
+      return '#/';
     }
     return '#/catalog?&sort=' + this.props.sort;
   },
