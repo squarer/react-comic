@@ -1,4 +1,5 @@
 node_modules
 *.json
 config.js
-bundle.js
+src/dist/bundle.js
+.DS_Store

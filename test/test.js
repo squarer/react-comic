@@ -1,7 +1,7 @@
 var assert = require('assert');
 var request = require('supertest');
 var express = require('express');
-var app = require('../app');
+var app = require('../index');
 
 describe('home', function() {
   describe('GET /', function() {
