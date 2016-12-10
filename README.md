@@ -9,12 +9,12 @@ A comic app front end built with [React](https://facebook.github.io/react/).
 ### Install Dependencies & Build
 ``` bash
 $ npm install
+$ cp config.js.example config.js
 $ npm run build
 ```
 
 ### Running the App
 ``` bash
-$ cp config.js.example config.js
 $ nodemon index.js
 ```
 
