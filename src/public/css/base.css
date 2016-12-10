@@ -158,6 +158,20 @@ body {
   background-color: #009688;
 }
 
+@media (max-width: 1199px) {
+  .navbar .navbar-nav > li > a {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 991px) {
+  .navbar .navbar-nav > li > a {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
 /* page */
 .page-img {
   margin: 0 auto;
