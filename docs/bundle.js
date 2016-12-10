@@ -34024,7 +34024,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-	  host: "http://localhost:1337"
+	  host: "http://52.39.102.96:1337"
 	}
 
 
