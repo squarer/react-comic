@@ -8,7 +8,7 @@ describe('home', function() {
     it('should get response', function(done) {
       request(app)
         .get('/')
-        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect('Content-Type', 'text/html; charset=UTF-8')
         .expect(200)
         .end(function(err, res) {
           if (err) {
