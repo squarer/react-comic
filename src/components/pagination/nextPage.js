@@ -6,7 +6,7 @@ var NextPage = React.createClass({
   },
   render: function() {
     return (
-      <li className={this.isLastPage() ? 'disabled' : ''}>
+      <li className={this.isLastPage() ? 'disabled next-page' : 'next-page'}>
         <a href={this.props.getUrl(parseInt(this.props.currentIndex) + 1)} aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>

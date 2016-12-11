@@ -6,7 +6,7 @@ var PrevPage = React.createClass({
   },
   render: function() {
     return (
-      <li className={this.isFirstPage() ? 'disabled' : ''}>
+      <li className={this.isFirstPage() ? 'disabled prev-page' : 'prev-page'}>
         <a href={this.props.getUrl(this.props.currentIndex - 1)}  aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>

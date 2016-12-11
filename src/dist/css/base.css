@@ -206,4 +206,22 @@ body {
     margin-top: 10px;
     text-align: center;
   }
+
+  .pagination {
+    display: flex;
+  }
+  .pagination > li {
+    display: none;
+  }
+  .pagination > .prev-page,
+  .pagination > .next-page,
+  .pagination > .active {
+    display: inline;
+    width: 33%;
+  }
+  .pagination > .prev-page > a,
+  .pagination > .next-page > a,
+  .pagination > .active > a {
+    width: 100%;
+  }
 }
