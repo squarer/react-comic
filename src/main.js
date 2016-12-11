@@ -6,6 +6,7 @@ var SearchBar = require('./components/searchBar');
 var Switch = require('./components/switch/switch');
 var ViewSwitch = require('./components/switch/viewSwitch');
 var Spinner = require('./components/common/spinner');
+var Footer = require('./components/footer');
 var config = require('../config.js');
 
 var Main = React.createClass({
@@ -275,7 +276,8 @@ var Main = React.createClass({
           viewMode={this.state.viewMode}
         />
         <Spinner />
-        <div className="footer"></div>
+        <div className="clearfix"></div>
+        <Footer />
       </div>
     );
   }
