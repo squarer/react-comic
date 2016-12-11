@@ -9,6 +9,7 @@ body {
 
 .crop img {
   height: 110px;
+  margin: 0 auto;
 }
 
 .img-responsive {
@@ -176,4 +177,21 @@ body {
 .page-img {
   margin: 0 auto;
   width: 100%;
+}
+
+/* detail */
+@media (max-width: 480px) {
+  .detail {
+    flex-direction: column;
+  }
+  .info {
+    margin-left: 0;
+    margin-top: 20px;
+  }
+  .crop {
+    height: 180px;
+  }
+  .crop img {
+    zoom: 1.9;
+  }
 }

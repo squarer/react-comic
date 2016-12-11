@@ -13,7 +13,7 @@ var NextChapter = React.createClass({
       ? <div className="alert alert-info text-center next-chapter hidden" role="alert" id="next-chapter">
           Latest Chapter Arrived
         </div>
-      : <a href={this.getUrl()} className="btn btn-primary btn-raised col-xs-12 hidden" id="next-chapter" onClick={this.returnTop}>
+      : <a href={this.props.url} className="btn btn-primary btn-raised col-xs-12 hidden" id="next-chapter" onClick={this.returnTop}>
           next chapter
         </a>
     );
