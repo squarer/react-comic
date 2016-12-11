@@ -18,4 +18,4 @@ $ npm run build
 $ nodemon index.js
 ```
 
-### [Demo](http://52.39.102.96:3000/)
+### [Demo](http://squarer.github.io/react-comic/)
