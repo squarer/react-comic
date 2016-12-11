@@ -195,3 +195,15 @@ body {
     zoom: 1.9;
   }
 }
+
+/* view switch */
+.view-switch {
+  margin-top: 40px;
+}
+
+@media (max-width: 767px) {
+  .view-switch {
+    margin-top: 10px;
+    text-align: center;
+  }
+}

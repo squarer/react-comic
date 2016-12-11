@@ -12,13 +12,11 @@ var ViewSwitch = React.createClass({
   },
   render: function() {
     return(
-      <div className="input-group col-xs-12 view-switch" style={{marginTop: 20}}>
-        <div className="col-xs-12" style={{paddingRight: 0}}>
-          <div data-order="update" className="togglebutton">
-            <label>
-              <input id="viewSwitch" type="checkbox" />scroll/paging
-            </label>
-          </div>
+      <div className="input-group col-xs-12 view-switch">
+        <div data-order="update" className="togglebutton">
+          <label>
+            <input id="viewSwitch" type="checkbox" />scroll/paging
+          </label>
         </div>
       </div>
     );

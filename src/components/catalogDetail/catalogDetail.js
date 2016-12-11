@@ -9,7 +9,7 @@ const flexWrapper = {
 
 const detail = {
   display: 'flex',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
 };
 
 const info = {
