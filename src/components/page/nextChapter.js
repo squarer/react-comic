@@ -2,6 +2,7 @@ var React = require('react');
 
 var NextChapter = React.createClass({
   returnTop: function() {
+    location.href = this.getUrl();
     window.scrollTo(0, 0);
   },
   getUrl: function() {
@@ -13,7 +14,7 @@ var NextChapter = React.createClass({
       ? <div className="alert alert-info text-center next-chapter hidden" role="alert" id="next-chapter">
           Latest Chapter Arrived
         </div>
-      : <a href={this.props.url} className="btn btn-primary btn-raised col-xs-12 hidden" id="next-chapter" onClick={this.returnTop}>
+      : <a href="javascript:void(0);" className="btn btn-primary btn-raised col-xs-12 hidden" id="next-chapter" onClick={this.returnTop}>
           next chapter
         </a>
     );
