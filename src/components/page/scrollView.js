@@ -37,12 +37,7 @@ var Pages = React.createClass({
     this.setState({loadPageCount: this.state.loadPageCount + 1});
   },
   render: function() {
-    var loadPage = [];
-    for (var i = 0; i < this.state.loadPageCount; i++) {
-      var url = this.props.pages[i];
-      loadPage.push(url);
-    }
-    var pageNodes = loadPage.map(function(result, index) {
+    var pageNodes = this.props.pages.slice(0, this.state.loadPageCount).map(function(result, index) {
       return <Page url={result} key={index} />
     });
     return (

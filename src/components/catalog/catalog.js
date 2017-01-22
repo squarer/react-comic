@@ -9,11 +9,11 @@ var Catalog = React.createClass({
       <div className="col-lg-2 col-md-3 col-sm-4 col-xs-6">
         <a
           className="btn btn-default btn-raised"
-          href={'#/catalog/' + this.props.catalog._id + '/'}
+          href={'#/catalog/' + this.props.catalog.ID + '/'}
           style={{paddingLeft: 15, paddingRight: 15}}
         >
           <div className="crop">
-            <img className="img-responsive" src={this.props.catalog.thumbnailurl} />
+            <img className="img-responsive" src={this.props.catalog.thumbnailURL} />
           </div>
           <p style={{
               marginTop: 10,

@@ -2,7 +2,7 @@ var React = require('react');
 
 var Breadcrumbs = React.createClass({
   getUrl: function() {
-    return '#/catalog/' + this.props.catalog._id + '/';
+    return '#/catalog/' + this.props.catalog.ID + '/';
   },
   getPrevNode: function() {
     if (!this.props.prevChapter) {

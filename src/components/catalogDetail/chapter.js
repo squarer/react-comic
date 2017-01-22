@@ -5,7 +5,7 @@ var Chapter = React.createClass({
     $.material.init();
   },
   getUrl: function() {
-    return '#/catalog/' + this.props.catalogId + '/chapter/' + this.props.chapter._id + '/page/1';
+    return '#/catalog/' + this.props.chapter.catalogID + '/chapter/' + this.props.chapter._id + '/page/1';
   },
   render: function() {
     return (

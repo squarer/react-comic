@@ -132,12 +132,8 @@ var Main = React.createClass({
       url: url,
       dataType: 'json',
       success: function(data) {
-        var pages = [];
-        data.forEach(function(value) {
-          pages.push(value.url);
-        });
         this.setState({
-          pages: pages,
+          pages: data,
           pageIndex: pageIndex,
           lookup: 'page'
         });

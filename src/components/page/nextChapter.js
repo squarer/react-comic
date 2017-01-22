@@ -6,7 +6,7 @@ var NextChapter = React.createClass({
     window.scrollTo(0, 0);
   },
   getUrl: function() {
-    return '#/catalog/' + this.props.catalog._id + '/chapter/' + this.props.nextChapter._id + '/page/1';
+    return '#/catalog/' + this.props.catalog.ID + '/chapter/' + this.props.nextChapter._id + '/page/1';
   },
   render: function() {
     return(

@@ -23,7 +23,7 @@ var CatalogDetail = React.createClass({
   render: function() {
     var chapterNodes = this.props.chapters.map(function(chapter, index) {
       return (
-        <Chapter catalogId={this.props.catalog._id} chapter={chapter} key={index} />
+        <Chapter chapter={chapter} key={index} />
       );
     }.bind(this));
     return (
@@ -35,13 +35,13 @@ var CatalogDetail = React.createClass({
           <div style={flexWrapper}>
             <div className="well detail" style={detail}>
               <div className="crop">
-                <img className="img-responsive " src={this.props.catalog.thumbnailurl} />
+                <img className="img-responsive " src={this.props.catalog.thumbnailURL} />
               </div>
               <div className="info" style={info}>
                 <p>category: {this.props.catalog.category}</p>
                 <p>title: {this.props.catalog.title}</p>
                 <p>author: {this.props.catalog.author}</p>
-                <p>updatedAt: {this.toISOFormat(this.props.catalog.updatedAt)}</p>
+                <p>_updated_at: {this.toISOFormat(this.props.catalog._updated_at)}</p>
               </div>
             </div>
           </div>
