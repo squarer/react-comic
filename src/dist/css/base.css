@@ -127,10 +127,13 @@ body {
 
 .return-top {
   position: fixed;
-  top: 90%;
-  left: 85%;
-  border-radius: 4px;
+  bottom: 20px;
+  right: 2%;
   display: none;
+  width: 80px;
+  height: 40px;
+  border-radius: 40px;
+  opacity: 0.8;
 }
 
 .misc {
