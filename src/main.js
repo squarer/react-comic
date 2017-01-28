@@ -246,34 +246,36 @@ var Main = React.createClass({
   render: function() {
     var host = this.props.host;
     return (
-      <div className="container">
+      <div className="container-fullwidth">
         <Navbar url={host + '/category'} sort={this.state.sort} />
-        <div className="row searchbar" style={{marginBottom: 20}}>
-          <div className="col-md-offset-3 col-md-6 col-sm-9">
-            <SearchBar url={host + '/catalog'} />
+        <div className="container">
+          <div className="row searchbar" style={{marginBottom: 20}}>
+            <div className="col-md-offset-3 col-md-6 col-sm-9">
+              <SearchBar url={host + '/catalog'} />
+            </div>
+            <div className="col-md-3 col-sm-3">
+              {this.getSwitch()}
+            </div>
           </div>
-          <div className="col-md-3 col-sm-3">
-            {this.getSwitch()}
-          </div>
+          <Wrapper
+            onSearch={this.handleSearch}
+            catalogs={this.state.catalogs}
+            catalog={this.state.catalog}
+            chapters={this.state.chapters}
+            chapter={this.state.chapter}
+            nextChapter={this.state.nextChapter}
+            prevChapter={this.state.prevChapter}
+            pages={this.state.pages}
+            pageIndex={this.state.pageIndex}
+            query={this.state.query}
+            more={this.state.more}
+            lookup={this.state.lookup}
+            viewMode={this.state.viewMode}
+          />
+          <Spinner />
+          <div className="clearfix"></div>
+          <Footer />
         </div>
-        <Wrapper
-          onSearch={this.handleSearch}
-          catalogs={this.state.catalogs}
-          catalog={this.state.catalog}
-          chapters={this.state.chapters}
-          chapter={this.state.chapter}
-          nextChapter={this.state.nextChapter}
-          prevChapter={this.state.prevChapter}
-          pages={this.state.pages}
-          pageIndex={this.state.pageIndex}
-          query={this.state.query}
-          more={this.state.more}
-          lookup={this.state.lookup}
-          viewMode={this.state.viewMode}
-        />
-        <Spinner />
-        <div className="clearfix"></div>
-        <Footer />
       </div>
     );
   }
