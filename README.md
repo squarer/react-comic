@@ -13,6 +13,11 @@ $ cp config.js.example config.js
 $ npm run build
 ```
 
+### Develope
+``` bash
+$ npm run dev
+```
+
 ### Running the App
 ``` bash
 $ nodemon index.js

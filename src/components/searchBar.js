@@ -46,6 +46,7 @@ var SearchBar = React.createClass({
 
     $('.typeahead').bind('typeahead:select', function(event, suggestion) {
       this.handleChange(event);
+      this.handleClick();
     }.bind(this));
 
     $.material.init();
