@@ -24,7 +24,7 @@ var Wrapper = React.createClass({
               {catalogNodes}
             </div>
             <div className="clearfix"></div>
-            <div className="misc">
+            <div className="misc text-center">
               {this.props.more ? <LoadMore loadMore={this.handleLoadMore} /> : <NoMore />}
             </div>
             <ReturnTop />

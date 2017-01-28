@@ -225,3 +225,7 @@ body {
     width: 100%;
   }
 }
+
+#loadMore[disabled] {
+  color: #fff;
+}

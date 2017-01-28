@@ -2,23 +2,14 @@ var React = require('react');
 
 var LoadMore = React.createClass({
   componentDidMount: function() {
-    window.addEventListener('scroll', function() {
-      var loadmore = $("button#loadMore");
-      if (loadmore.length <= 0) {
-        return;
-      }
-      if ($.active > 0) {
-        return;
-      }
-      if(loadmore.position().top < $(window).scrollTop() + $(window).height()) {
-        loadmore.click();
-      }
-    }, false);
+    $('#loadMore').button({loadingText: '載入中...'});
   },
   render: function() {
     return (
-      <button type="button" id="loadMore" className="btn btn-raised btn-default" onClick={this.props.loadMore}>
-        load more...
+      <button type="button" id="loadMore" className="btn btn-raised btn-info"
+        onClick={this.props.loadMore}
+        style={{width: "100%", maxWidth: 500, height: 50, borderRadius: 100}}>
+        載入更多內容
       </button>
     );
   }
