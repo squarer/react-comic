@@ -12,10 +12,10 @@ var NextChapter = React.createClass({
     return(
       this.props.nextChapter === null
       ? <div className="alert alert-info text-center next-chapter hidden" role="alert" id="next-chapter">
-          Latest Chapter Arrived
+          已是最新章節
         </div>
       : <a href="javascript:void(0);" className="btn btn-primary btn-raised col-xs-12 hidden" id="next-chapter" onClick={this.returnTop}>
-          next chapter
+          下一話
         </a>
     );
   }

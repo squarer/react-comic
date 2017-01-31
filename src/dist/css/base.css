@@ -239,3 +239,20 @@ body {
 #loadMore[disabled] {
   color: #fff;
 }
+
+.page .well,
+.next-chapter-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.breadcrumb {
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+}
+
+@media (max-width: 991px) {
+  .searchbar div {
+    width: 100%;
+  }
+}

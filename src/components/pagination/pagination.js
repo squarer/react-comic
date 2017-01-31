@@ -8,7 +8,7 @@ var Pagination = React.createClass({
   componentDidMount: function() {
     $('.pagination a').on('click', function(e) {
       var className = $(this).parent('li').attr('class');
-      if (className == 'disabled' || className == 'active') {
+      if (className.includes('disabled') || className == 'active') {
         e.preventDefault();
       }
     });

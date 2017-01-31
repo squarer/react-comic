@@ -51,7 +51,7 @@ var Pages = React.createClass({
         <div className="page text-center">
           {pageNodes}
         </div>
-        <div className="text-center">
+        <div className="text-center next-chapter-wrapper">
           <NextChapter catalog={this.props.catalog} nextChapter={this.props.nextChapter} />
         </div>
         <ReturnTop />

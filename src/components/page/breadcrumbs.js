@@ -11,7 +11,7 @@ var Breadcrumbs = React.createClass({
     return (
       <span className="pull-left">
         <a href={this.getUrl() + 'chapter/' + this.props.prevChapter._id + '/page/1'}>
-          Prev
+          上一話
         </a>
       </span>
     );
@@ -23,7 +23,7 @@ var Breadcrumbs = React.createClass({
     return (
       <span className="pull-right">
         <a href={this.getUrl() + 'chapter/' + this.props.nextChapter._id + '/page/1'}>
-          Next
+          下一話
         </a>
       </span>
     );
