@@ -250,9 +250,3 @@ body {
   max-width: 800px;
   margin: 0 auto 20px auto;
 }
-
-@media (max-width: 991px) {
-  .searchbar div {
-    width: 100%;
-  }
-}

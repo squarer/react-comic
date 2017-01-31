@@ -245,12 +245,13 @@ var Main = React.createClass({
   },
   render: function() {
     var host = this.props.host;
+    var searchBarClass = this.state.lookup === 'page' ? 'col-sm-12' : 'col-sm-9';
     return (
       <div className="container-fullwidth">
         <Navbar url={host + '/category'} sort={this.state.sort} />
         <div className="container">
           <div className="row searchbar" style={{marginBottom: 20}}>
-            <div className="col-md-offset-3 col-md-6 col-sm-9">
+            <div className={"col-md-offset-3 col-md-6 " + searchBarClass}>
               <SearchBar url={host + '/catalog'} />
             </div>
             <div className="col-md-3 col-sm-3">
