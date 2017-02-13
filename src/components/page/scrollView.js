@@ -7,7 +7,7 @@ var NextChapter = require('./nextChapter');
 var Pages = React.createClass({
   getInitialState: function () {
       return {
-          loadPageCount: 1
+          loadPageCount: 3
       }
   },
   componentDidMount: function() {
