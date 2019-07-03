@@ -282,10 +282,13 @@ var Main = React.createClass({
   }
 });
 
-var host = config.host;
+var host
 var limit = 30;
+fetch(config.host).then(res => res.json()).then(res => {
+  host = res.host
+  ReactDOM.render(
+    <Main host={host} />,
+    document.querySelector('#container')
+  );
+})
 
-ReactDOM.render(
-  <Main host={host} />,
-  document.querySelector('#container')
-);
